@@ -1,12 +1,14 @@
 #pragma once
 #include "allegro5\allegro.h"
+#include <string>
 class Shader
 {
 public:
 	
-	ALLEGRO_SHADER *bgShader;
+	ALLEGRO_SHADER *shader;
 
-	bool load(ALLEGRO_DISPLAY* display);
+	// Don't pass extensions, the function will handle those
+	bool load(ALLEGRO_DISPLAY* display, std::string vertexPath, std::string pixelPath);
 	void unload();
 
 	Shader();

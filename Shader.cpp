@@ -1,44 +1,54 @@
 #include "Shader.h"
 #include <iostream>
 
-bool Shader::load(ALLEGRO_DISPLAY* display)
+bool Shader::load(ALLEGRO_DISPLAY* display, std::string vertexPath, std::string pixelPath)
 {
-	bgShader = al_create_shader(ALLEGRO_SHADER_AUTO);
-	if(!bgShader)
+	shader = al_create_shader(ALLEGRO_SHADER_AUTO);
+	if(!shader)
 	{
 		return false;
 	}
 
 	// OpenGL Shader
-	if (al_get_shader_platform(bgShader) == ALLEGRO_SHADER_GLSL)
+	if (al_get_shader_platform(shader) == ALLEGRO_SHADER_GLSL)
 	{
-		al_attach_shader_source_file(bgShader, ALLEGRO_VERTEX_SHADER, "shaders/Vertex Shader.glsl");
-		al_attach_shader_source_file(bgShader, ALLEGRO_PIXEL_SHADER, "shaders/BG Pixel Shader.glsl");
+		vertexPath += ".glsl";
+		pixelPath += ".glsl";
 	}
 
 	// Direct3D Shader
 	else
 	{
-		al_attach_shader_source_file(bgShader, ALLEGRO_VERTEX_SHADER, "shaders/Vertex Shader.hlsl");
-		al_attach_shader_source_file(bgShader, ALLEGRO_PIXEL_SHADER, "shaders/BG Pixel Shader.hlsl");
+		vertexPath += ".hlsl";
+		pixelPath += ".hlsl";
 	}
 
-	if (!al_build_shader(bgShader))
+	if (!al_attach_shader_source_file(shader, ALLEGRO_VERTEX_SHADER, vertexPath.c_str()))
 	{
-		std::cout << al_get_shader_log(bgShader);
+		std::cout << al_get_shader_log(shader);
 		std::cin.get();
+		return false;
+	}
+	if (!al_attach_shader_source_file(shader, ALLEGRO_PIXEL_SHADER, pixelPath.c_str()))
+	{
+		std::cout << al_get_shader_log(shader);
 		std::cin.get();
 		return false;
 	}
 
-	std::cout << al_get_shader_log(bgShader);
+	if (!al_build_shader(shader))
+	{
+		std::cout << al_get_shader_log(shader);
+		std::cin.get();
+		return false;
+	}
 
 	return true;
 }
 
 void Shader::unload()
 {
-	al_destroy_shader(bgShader);
+	al_destroy_shader(shader);
 }
 
 Shader::Shader()

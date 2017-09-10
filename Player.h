@@ -24,7 +24,7 @@ public:
 	ALLEGRO_BITMAP* trail;	// The player's trail, pasted multiple times
 	static const int trailNum = 20;	// The number of trail sprites to put behind the player
 
-	// The previous x and y positions to paste the trail at, as well as the angle
+	// The previous x and y positions to paste the trail at, as well as the angle and size
 	float trailX[trailNum];
 	float trailY[trailNum];
 	float trailAngle[trailNum];
@@ -32,7 +32,7 @@ public:
 
 	void init();	// Initializes the player and loads any necessary data.
 	void unload();	// Unloads anything necessary from memory.
-	void draw(Camera camera);	// Draws the player to the screen (a wrapper function for now, more functionality added later)
+	void draw(Camera camera);	// Draws the player to the screen
 	void update(bool* keys, Camera camera);	// Updates the player's position and stuff
 
 	Player();

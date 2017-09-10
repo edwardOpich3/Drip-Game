@@ -1,8 +1,12 @@
 #include "Game.h"
 #include "allegro5/allegro_image.h"
+#include <string>
+#include <sstream>
 
 enum GAME_STATE { SPLASH, TITLE, GAME };
 enum KEYS { LEFT, RIGHT };
+enum OBSTACLES { CLOCK };
+enum POWERUPS { FAST, SLOW, SIZE, TIME, LIFE };
 
 ALLEGRO_DISPLAY* Game::display;
 ALLEGRO_EVENT_QUEUE* Game::event;
@@ -13,13 +17,21 @@ bool Game::quit;
 bool Game::update;
 char Game::state;
 bool Game::keys[] = { false, false };
+int Game::level;
 
 Player Game::player;
 Camera Game::camera;
-Shader Game::shader;
+Shader Game::bgShader;
+
+const int Game::numObstacles;
+GameObject Game::obstacles[];
 
 ALLEGRO_BITMAP* Game::background;
 ALLEGRO_BITMAP* Game::bgBuffer;
+ALLEGRO_BITMAP* Game::powerups[];
+
+int Game::numObstacleSpr;
+ALLEGRO_BITMAP** Game::obstacleSpr;
 
 bool Game::initialize()
 {
@@ -31,7 +43,7 @@ bool Game::initialize()
 
 	// Set any new window settings
 	al_set_new_window_title("Drip Game");
-	al_set_new_display_flags(ALLEGRO_PROGRAMMABLE_PIPELINE);
+	al_set_new_display_flags(ALLEGRO_PROGRAMMABLE_PIPELINE/* | ALLEGRO_OPENGL*/);	// Uncomment the " | ALLEGRO_OPENGL" to test using an OpenGL device
 
 	// Initialize a window of size 1024 X 768, check for success
 	display = al_create_display(1024, 768);
@@ -80,6 +92,7 @@ bool Game::initialize()
 	quit = false;
 	update = false;
 	state = GAME;
+	level = 1;
 
 	// Initialize for the first state
 	load();
@@ -169,7 +182,7 @@ void Game::updateFrame()
 
 		case GAME:
 		{
-			al_use_shader(shader.bgShader);
+			al_use_shader(bgShader.shader);
 
 			float texSize[2] = { (float)al_get_bitmap_width(background), (float)al_get_bitmap_height(background) };
 			al_set_shader_float_vector("texSize", 2, texSize, 1);
@@ -182,9 +195,11 @@ void Game::updateFrame()
 			float cameraPos[2] = { (float)camera.x, (float)camera.y };
 			al_set_shader_float_vector("cameraPos", 2, cameraPos, 1);
 
-			al_draw_bitmap(bgBuffer, 0, 0, NULL);	// Update this when your shader code is written!
+			al_draw_bitmap(bgBuffer, 0, 0, NULL);
 
 			al_use_shader(NULL);
+
+			obstacles[0].draw(camera, obstacleSpr[0]);
 
 			camera.update(player.x - 512, player.y - 64);
 			player.update(keys, camera);
@@ -212,13 +227,83 @@ void Game::load()
 		}
 		case GAME:
 		{
-			background = al_load_bitmap("data/bgs/test.jpg");	// Update this to be less hacky later!
+			loadBG();
+			loadPowerups();
+			loadObstacles();
 			camera.init();
 			player.init();
-			shader.load(display);
+			bgShader.load(display, "shaders/Vertex Shader", "shaders/BG Pixel Shader");
+
+			obstacles[0].load(CLOCK);
+
 			break;
 		}
 	}
+}
+
+void Game::loadBG()
+{
+	std::string path = "data/bgs/bg";
+	std::stringstream convert;
+	convert << level;
+	path += convert.str();
+	path += ".png";
+	background = al_load_bitmap(path.c_str());
+}
+
+void Game::loadPowerups()
+{
+	std::stringstream convert;
+	std::string path;
+	for (int i = 0; i < 5; i++)
+	{
+		path = "data/sprites/powerups/";
+		convert << i;
+		path += convert.str();
+		path += ".png";
+		powerups[i] = al_load_bitmap(path.c_str());
+	}
+}
+
+void Game::loadObstacles()
+{
+	std::stringstream convert;
+	std::string path;
+
+	switch (level)
+	{
+		case 1:
+		{
+			numObstacleSpr = 1;
+			obstacleSpr = new ALLEGRO_BITMAP*[numObstacleSpr];
+			for (int i = 0; i < numObstacleSpr; i++)
+			{
+				path = "data/sprites/obstacles/";
+				convert << i;
+				path += convert.str();
+				path += ".png";
+				obstacleSpr[i] = al_load_bitmap(path.c_str());
+			}
+			break;
+		}
+	}
+}
+
+void Game::unloadPowerups()
+{
+	for (int i = 0; i < 5; i++)
+	{
+		al_destroy_bitmap(powerups[i]);
+	}
+}
+
+void Game::unloadObstacles()
+{
+	for (int i = 0; i < numObstacleSpr; i++)
+	{
+		al_destroy_bitmap(obstacleSpr[i]);
+	}
+	delete obstacleSpr;
 }
 
 void Game::unload()
@@ -236,8 +321,13 @@ void Game::unload()
 		case GAME:
 		{
 			al_destroy_bitmap(background);
+			unloadPowerups();
+			unloadObstacles();
 			player.unload();
-			shader.unload();
+			bgShader.unload();
+
+			obstacles[0].unload();
+
 			break;
 		}
 	}
@@ -247,6 +337,7 @@ void Game::end()
 {
 	// Free any memory that needs to be freed
 	al_destroy_bitmap(buffer);
+	al_destroy_bitmap(bgBuffer);
 	al_destroy_timer(timer);
 	al_destroy_event_queue(event);
 	al_destroy_display(display);

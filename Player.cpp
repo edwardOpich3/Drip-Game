@@ -1,7 +1,7 @@
 #include "Player.h"
 #include <math.h>
 
-enum POWERUPS { MULTIPLIER, SPEED_UP, SPEED_DOWN };
+enum POWERUPS { MULTIPLIER = 3, FAST = 4, SLOW = 8, SIZE = 16, TIME = 32, LIFE = 192 };
 enum ANIMATION_STATE { IDLE, TURNING, HIT };
 enum KEYS { LEFT, RIGHT };
 
@@ -65,7 +65,7 @@ void Player::update(bool* keys, Camera camera)
 	trailSize[0] = size;
 
 	x += sin((angle - 270.0f) * (ALLEGRO_PI / 180.0f)) * velocity;
-	y += cos((angle - 270.0f) * (ALLEGRO_PI / 180.0f)) * velocity; // Add this when vertical movement is added.
+	y += cos((angle - 270.0f) * (ALLEGRO_PI / 180.0f)) * velocity;
 
 	/*if (x < 0)
 	{
