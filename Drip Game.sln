@@ -5,7 +5,7 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Drip Game Windows", "Drip Game.vcxproj", "{57C31DBE-A62D-4ED8-B94A-FED7FB1856B8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Object Formation Editor", "..\Object Formation Editor\Object Formation Editor.csproj", "{1443AE96-4ED7-4560-B080-C0AA6AD6D1C1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Object Formation Editor", "Object Formation Editor\Object Formation Editor.csproj", "{1443AE96-4ED7-4560-B080-C0AA6AD6D1C1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
