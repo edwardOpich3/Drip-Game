@@ -2,6 +2,7 @@
 #include "allegro5/allegro_image.h"
 #include <string>
 #include <sstream>
+#include <fstream>
 
 enum GAME_STATE { SPLASH, TITLE, GAME };
 enum KEYS { LEFT, RIGHT };
@@ -23,8 +24,9 @@ Player Game::player;
 Camera Game::camera;
 Shader Game::bgShader;
 
-const int Game::numObstacles;
-GameObject Game::obstacles[];
+int Game::numFormations;
+int Game::formationsSize;
+Formation* Game::formations;
 
 ALLEGRO_BITMAP* Game::background;
 ALLEGRO_BITMAP* Game::bgBuffer;
@@ -182,6 +184,36 @@ void Game::updateFrame()
 
 		case GAME:
 		{
+			for (int i = 0; i < numFormations; i++)
+			{
+				if (formations[i].y <= player.y - 2048)
+				{
+					removeFormation(i);
+					i--;
+				}
+			}
+
+			// Player's entered a new chunk row
+			if (((int)player.trailY[0] / 2048) < ((int)player.y / 2048))
+			{
+				int max = numFormations + 3;
+				for (int i = numFormations; i < max; i++)
+				{
+					if (numFormations >= formationsSize)
+					{
+						resizeFormations();
+					}
+					formations[i].load((((int)player.x / 2048) + ((i - (max - 3)) - 1)) * 2048, (((int)player.y / 2048) + 1) * 2048, obstacleSpr);
+					numFormations++;
+				}
+			}
+
+			// Player's moved one column right
+			/*if (((int)player.trailX[0] / 2048) < ((int)player.x / 2048))
+			{
+
+			}*/
+
 			al_use_shader(bgShader.shader);
 
 			float texSize[2] = { (float)al_get_bitmap_width(background), (float)al_get_bitmap_height(background) };
@@ -199,7 +231,10 @@ void Game::updateFrame()
 
 			al_use_shader(NULL);
 
-			obstacles[0].draw(camera, obstacleSpr[0]);
+			for (int i = 0; i < numFormations; i++)
+			{
+				formations[i].draw(camera);
+			}
 
 			camera.update(player.x - 512, player.y - 64);
 			player.update(keys, camera);
@@ -211,6 +246,32 @@ void Game::updateFrame()
 	al_set_target_backbuffer(Game::display);
 	al_draw_bitmap(Game::buffer, 0, 0, NULL);
 	al_flip_display();
+}
+
+void Game::resizeFormations()
+{
+	formationsSize *= 2;
+	Formation* temp = new Formation[formationsSize];
+	for (int i = 0; i < formationsSize / 2; i++)
+	{
+		temp[i] = formations[i];
+	}
+
+	delete[] formations;
+	formations = nullptr;
+	formations = temp;
+}
+
+void Game::removeFormation(int index)
+{
+	formations[index].unload();
+
+	for (int i = index; i < numFormations; i++)
+	{
+		formations[i] = formations[i + 1];
+	}
+
+	numFormations--;
 }
 
 void Game::load()
@@ -228,13 +289,19 @@ void Game::load()
 		case GAME:
 		{
 			loadBG();
-			loadPowerups();
-			loadObstacles();
+			loadPowerupData();
+			loadObstacleData();
 			camera.init();
 			player.init();
 			bgShader.load(display, "shaders/Vertex Shader", "shaders/BG Pixel Shader");
 
-			obstacles[0].load(CLOCK);
+			numFormations = 3;
+			formationsSize = 4;
+
+			formations = new Formation[formationsSize];
+			formations[0].load(-2048, 2048, obstacleSpr);
+			formations[1].load(0, 2048, obstacleSpr);
+			formations[2].load(2048, 2048, obstacleSpr);
 
 			break;
 		}
@@ -251,7 +318,7 @@ void Game::loadBG()
 	background = al_load_bitmap(path.c_str());
 }
 
-void Game::loadPowerups()
+void Game::loadPowerupData()
 {
 	std::stringstream convert;
 	std::string path;
@@ -265,7 +332,7 @@ void Game::loadPowerups()
 	}
 }
 
-void Game::loadObstacles()
+void Game::loadObstacleData()
 {
 	std::stringstream convert;
 	std::string path;
@@ -289,7 +356,7 @@ void Game::loadObstacles()
 	}
 }
 
-void Game::unloadPowerups()
+void Game::unloadPowerupData()
 {
 	for (int i = 0; i < 5; i++)
 	{
@@ -297,7 +364,7 @@ void Game::unloadPowerups()
 	}
 }
 
-void Game::unloadObstacles()
+void Game::unloadObstacleData()
 {
 	for (int i = 0; i < numObstacleSpr; i++)
 	{
@@ -321,12 +388,16 @@ void Game::unload()
 		case GAME:
 		{
 			al_destroy_bitmap(background);
-			unloadPowerups();
-			unloadObstacles();
+			unloadPowerupData();
+			unloadObstacleData();
 			player.unload();
 			bgShader.unload();
 
-			obstacles[0].unload();
+			for (int i = 0; i < numFormations; i++)
+			{
+				formations[i].unload();
+			}
+			delete[] formations;
 
 			break;
 		}

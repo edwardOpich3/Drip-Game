@@ -1,7 +1,7 @@
 #include "GameObject.h"
 
 // Super-duper hacky, fix this later!
-void GameObject::load(float type)
+void GameObject::load(int type)
 {
 	this->type = type;
 	x = 512.0f, y = 1024.0f;
@@ -20,7 +20,7 @@ void GameObject::update()
 
 }
 
-void GameObject::draw(Camera camera, ALLEGRO_BITMAP* sprite)
+void GameObject::draw(Camera camera)
 {
 	al_draw_scaled_rotated_bitmap(sprite, (al_get_bitmap_width(sprite) / 2.0f), (al_get_bitmap_height(sprite) / 2.0f), x - camera.x, y - camera.y, size * (width / al_get_bitmap_width(sprite)), size * (height / al_get_bitmap_height(sprite)), -angle * (ALLEGRO_PI / 180.0f), NULL);
 }

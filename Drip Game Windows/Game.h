@@ -3,7 +3,7 @@
 #include "Player.h"
 #include "Camera.h"
 #include "Shader.h"
-#include "GameObject.h"
+#include "Formation.h"
 class Game
 {
 public:
@@ -23,8 +23,9 @@ public:
 	static Camera camera;
 	static Shader bgShader;
 
-	const static int numObstacles = 5;
-	static GameObject obstacles[numObstacles];
+	static int numFormations;
+	static int formationsSize;
+	static Formation* formations;
 
 	static ALLEGRO_BITMAP* background;
 	static ALLEGRO_BITMAP* bgBuffer;
@@ -36,13 +37,19 @@ public:
 	static bool initialize();
 	static void handleEvents();
 	static void updateFrame();
+
+	static void resizeFormations();
+	static void removeFormation(int index);
+
 	static void load();
 	static void loadBG();
-	static void loadPowerups();
-	static void loadObstacles();
-	static void unloadPowerups();
-	static void unloadObstacles();
+	static void loadPowerupData();
+	static void loadObstacleData();
+
+	static void unloadPowerupData();
+	static void unloadObstacleData();
 	static void unload();
+
 	static void end();
 };
 

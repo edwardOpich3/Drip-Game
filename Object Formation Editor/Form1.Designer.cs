@@ -28,51 +28,37 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
 			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
 			this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.undoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.redoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.pictureBox1 = new System.Windows.Forms.PictureBox();
+			this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.helpToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
 			this.panel1 = new System.Windows.Forms.Panel();
-			this.pictureBox2 = new System.Windows.Forms.PictureBox();
 			this.tabControl1 = new System.Windows.Forms.TabControl();
 			this.tabPage1 = new System.Windows.Forms.TabPage();
 			this.tabPage2 = new System.Windows.Forms.TabPage();
-			this.pictureBox7 = new System.Windows.Forms.PictureBox();
-			this.pictureBox6 = new System.Windows.Forms.PictureBox();
-			this.pictureBox5 = new System.Windows.Forms.PictureBox();
-			this.pictureBox4 = new System.Windows.Forms.PictureBox();
-			this.pictureBox3 = new System.Windows.Forms.PictureBox();
-			this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.helpToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-			this.comboBox1 = new System.Windows.Forms.ComboBox();
+			this.dragFuncComboBox = new System.Windows.Forms.ComboBox();
 			this.label1 = new System.Windows.Forms.Label();
-			this.textBox1 = new System.Windows.Forms.TextBox();
-			this.label2 = new System.Windows.Forms.Label();
-			this.textBox2 = new System.Windows.Forms.TextBox();
-			this.label3 = new System.Windows.Forms.Label();
-			this.comboBox2 = new System.Windows.Forms.ComboBox();
+			this.yAndAngleTextBox = new System.Windows.Forms.TextBox();
+			this.yAndAngleLabel = new System.Windows.Forms.Label();
+			this.xTextBox = new System.Windows.Forms.TextBox();
+			this.xLabel = new System.Windows.Forms.Label();
+			this.levelThemeComboBox = new System.Windows.Forms.ComboBox();
 			this.label4 = new System.Windows.Forms.Label();
+			this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+			this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+			this.plusButton = new System.Windows.Forms.Button();
+			this.minusButton = new System.Windows.Forms.Button();
+			this.label2 = new System.Windows.Forms.Label();
 			this.menuStrip1.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-			this.panel1.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
 			this.tabControl1.SuspendLayout();
-			this.tabPage1.SuspendLayout();
-			this.tabPage2.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.pictureBox7)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// menuStrip1
@@ -93,7 +79,6 @@
             this.newToolStripMenuItem,
             this.openToolStripMenuItem,
             this.saveToolStripMenuItem,
-            this.saveAsToolStripMenuItem,
             this.exitToolStripMenuItem});
 			this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
 			this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
@@ -102,32 +87,30 @@
 			// newToolStripMenuItem
 			// 
 			this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-			this.newToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
+			this.newToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
 			this.newToolStripMenuItem.Text = "New";
+			this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
 			// 
 			// openToolStripMenuItem
 			// 
 			this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-			this.openToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
+			this.openToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
 			this.openToolStripMenuItem.Text = "Open";
+			this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
 			// 
 			// saveToolStripMenuItem
 			// 
 			this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-			this.saveToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
+			this.saveToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
 			this.saveToolStripMenuItem.Text = "Save";
-			// 
-			// saveAsToolStripMenuItem
-			// 
-			this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-			this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
-			this.saveAsToolStripMenuItem.Text = "Save as";
+			this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
 			// 
 			// exitToolStripMenuItem
 			// 
 			this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-			this.exitToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
+			this.exitToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
 			this.exitToolStripMenuItem.Text = "Exit";
+			this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
 			// 
 			// editToolStripMenuItem
 			// 
@@ -159,33 +142,26 @@
 			this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
 			this.helpToolStripMenuItem.Text = "Help";
 			// 
-			// pictureBox1
+			// aboutToolStripMenuItem
 			// 
-			this.pictureBox1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.BackgroundImage")));
-			this.pictureBox1.Location = new System.Drawing.Point(3, 3);
-			this.pictureBox1.Name = "pictureBox1";
-			this.pictureBox1.Size = new System.Drawing.Size(1024, 1024);
-			this.pictureBox1.TabIndex = 1;
-			this.pictureBox1.TabStop = false;
+			this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+			this.aboutToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
+			this.aboutToolStripMenuItem.Text = "About";
+			// 
+			// helpToolStripMenuItem1
+			// 
+			this.helpToolStripMenuItem1.Name = "helpToolStripMenuItem1";
+			this.helpToolStripMenuItem1.Size = new System.Drawing.Size(107, 22);
+			this.helpToolStripMenuItem1.Text = "Help";
 			// 
 			// panel1
 			// 
+			this.panel1.AllowDrop = true;
 			this.panel1.AutoScroll = true;
-			this.panel1.Controls.Add(this.pictureBox1);
 			this.panel1.Location = new System.Drawing.Point(12, 27);
 			this.panel1.Name = "panel1";
 			this.panel1.Size = new System.Drawing.Size(512, 512);
 			this.panel1.TabIndex = 2;
-			// 
-			// pictureBox2
-			// 
-			this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
-			this.pictureBox2.Location = new System.Drawing.Point(32, 32);
-			this.pictureBox2.Name = "pictureBox2";
-			this.pictureBox2.Size = new System.Drawing.Size(128, 128);
-			this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-			this.pictureBox2.TabIndex = 0;
-			this.pictureBox2.TabStop = false;
 			// 
 			// tabControl1
 			// 
@@ -200,7 +176,6 @@
 			// tabPage1
 			// 
 			this.tabPage1.AutoScroll = true;
-			this.tabPage1.Controls.Add(this.pictureBox2);
 			this.tabPage1.Location = new System.Drawing.Point(4, 22);
 			this.tabPage1.Name = "tabPage1";
 			this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
@@ -212,11 +187,6 @@
 			// tabPage2
 			// 
 			this.tabPage2.AutoScroll = true;
-			this.tabPage2.Controls.Add(this.pictureBox7);
-			this.tabPage2.Controls.Add(this.pictureBox6);
-			this.tabPage2.Controls.Add(this.pictureBox5);
-			this.tabPage2.Controls.Add(this.pictureBox4);
-			this.tabPage2.Controls.Add(this.pictureBox3);
 			this.tabPage2.Location = new System.Drawing.Point(4, 22);
 			this.tabPage2.Name = "tabPage2";
 			this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
@@ -225,80 +195,18 @@
 			this.tabPage2.Text = "Powerups";
 			this.tabPage2.UseVisualStyleBackColor = true;
 			// 
-			// pictureBox7
+			// dragFuncComboBox
 			// 
-			this.pictureBox7.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox7.Image")));
-			this.pictureBox7.Location = new System.Drawing.Point(192, 192);
-			this.pictureBox7.Name = "pictureBox7";
-			this.pictureBox7.Size = new System.Drawing.Size(128, 128);
-			this.pictureBox7.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-			this.pictureBox7.TabIndex = 4;
-			this.pictureBox7.TabStop = false;
-			// 
-			// pictureBox6
-			// 
-			this.pictureBox6.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox6.Image")));
-			this.pictureBox6.Location = new System.Drawing.Point(32, 192);
-			this.pictureBox6.Name = "pictureBox6";
-			this.pictureBox6.Size = new System.Drawing.Size(128, 128);
-			this.pictureBox6.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-			this.pictureBox6.TabIndex = 3;
-			this.pictureBox6.TabStop = false;
-			// 
-			// pictureBox5
-			// 
-			this.pictureBox5.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox5.Image")));
-			this.pictureBox5.Location = new System.Drawing.Point(352, 32);
-			this.pictureBox5.Name = "pictureBox5";
-			this.pictureBox5.Size = new System.Drawing.Size(128, 128);
-			this.pictureBox5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-			this.pictureBox5.TabIndex = 2;
-			this.pictureBox5.TabStop = false;
-			// 
-			// pictureBox4
-			// 
-			this.pictureBox4.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox4.Image")));
-			this.pictureBox4.Location = new System.Drawing.Point(192, 32);
-			this.pictureBox4.Name = "pictureBox4";
-			this.pictureBox4.Size = new System.Drawing.Size(128, 128);
-			this.pictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-			this.pictureBox4.TabIndex = 1;
-			this.pictureBox4.TabStop = false;
-			// 
-			// pictureBox3
-			// 
-			this.pictureBox3.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox3.Image")));
-			this.pictureBox3.Location = new System.Drawing.Point(32, 32);
-			this.pictureBox3.Name = "pictureBox3";
-			this.pictureBox3.Size = new System.Drawing.Size(128, 128);
-			this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-			this.pictureBox3.TabIndex = 0;
-			this.pictureBox3.TabStop = false;
-			// 
-			// aboutToolStripMenuItem
-			// 
-			this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-			this.aboutToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-			this.aboutToolStripMenuItem.Text = "About";
-			// 
-			// helpToolStripMenuItem1
-			// 
-			this.helpToolStripMenuItem1.Name = "helpToolStripMenuItem1";
-			this.helpToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
-			this.helpToolStripMenuItem1.Text = "Help";
-			// 
-			// comboBox1
-			// 
-			this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBox1.FormattingEnabled = true;
-			this.comboBox1.Items.AddRange(new object[] {
+			this.dragFuncComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.dragFuncComboBox.FormattingEnabled = true;
+			this.dragFuncComboBox.Items.AddRange(new object[] {
             "Position",
             "Rotation",
             "Scale"});
-			this.comboBox1.Location = new System.Drawing.Point(917, 545);
-			this.comboBox1.Name = "comboBox1";
-			this.comboBox1.Size = new System.Drawing.Size(121, 21);
-			this.comboBox1.TabIndex = 3;
+			this.dragFuncComboBox.Location = new System.Drawing.Point(917, 545);
+			this.dragFuncComboBox.Name = "dragFuncComboBox";
+			this.dragFuncComboBox.Size = new System.Drawing.Size(121, 21);
+			this.dragFuncComboBox.TabIndex = 3;
 			// 
 			// label1
 			// 
@@ -308,53 +216,56 @@
 			this.label1.Size = new System.Drawing.Size(74, 13);
 			this.label1.TabIndex = 4;
 			this.label1.Text = "Drag Function";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
-			// textBox1
+			// yAndAngleTextBox
 			// 
-			this.textBox1.Location = new System.Drawing.Point(784, 546);
-			this.textBox1.Name = "textBox1";
-			this.textBox1.Size = new System.Drawing.Size(100, 20);
-			this.textBox1.TabIndex = 5;
-			this.textBox1.Text = "0";
-			this.textBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+			this.yAndAngleTextBox.Location = new System.Drawing.Point(784, 546);
+			this.yAndAngleTextBox.Name = "yAndAngleTextBox";
+			this.yAndAngleTextBox.Size = new System.Drawing.Size(100, 20);
+			this.yAndAngleTextBox.TabIndex = 5;
+			this.yAndAngleTextBox.Text = "0";
+			this.yAndAngleTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
 			// 
-			// label2
+			// yAndAngleLabel
 			// 
-			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(830, 569);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(12, 13);
-			this.label2.TabIndex = 6;
-			this.label2.Text = "y";
+			this.yAndAngleLabel.AutoSize = true;
+			this.yAndAngleLabel.Location = new System.Drawing.Point(830, 569);
+			this.yAndAngleLabel.Name = "yAndAngleLabel";
+			this.yAndAngleLabel.Size = new System.Drawing.Size(12, 13);
+			this.yAndAngleLabel.TabIndex = 6;
+			this.yAndAngleLabel.Text = "y";
+			this.yAndAngleLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
-			// textBox2
+			// xTextBox
 			// 
-			this.textBox2.Location = new System.Drawing.Point(649, 546);
-			this.textBox2.Name = "textBox2";
-			this.textBox2.Size = new System.Drawing.Size(100, 20);
-			this.textBox2.TabIndex = 7;
-			this.textBox2.Text = "0";
-			this.textBox2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+			this.xTextBox.Location = new System.Drawing.Point(649, 546);
+			this.xTextBox.Name = "xTextBox";
+			this.xTextBox.Size = new System.Drawing.Size(100, 20);
+			this.xTextBox.TabIndex = 7;
+			this.xTextBox.Text = "0";
+			this.xTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
 			// 
-			// label3
+			// xLabel
 			// 
-			this.label3.AutoSize = true;
-			this.label3.Location = new System.Drawing.Point(694, 569);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(12, 13);
-			this.label3.TabIndex = 8;
-			this.label3.Text = "x";
+			this.xLabel.AutoSize = true;
+			this.xLabel.Location = new System.Drawing.Point(694, 569);
+			this.xLabel.Name = "xLabel";
+			this.xLabel.Size = new System.Drawing.Size(12, 13);
+			this.xLabel.TabIndex = 8;
+			this.xLabel.Text = "x";
+			this.xLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
-			// comboBox2
+			// levelThemeComboBox
 			// 
-			this.comboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBox2.FormattingEnabled = true;
-			this.comboBox2.Items.AddRange(new object[] {
+			this.levelThemeComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.levelThemeComboBox.FormattingEnabled = true;
+			this.levelThemeComboBox.Items.AddRange(new object[] {
             "1"});
-			this.comboBox2.Location = new System.Drawing.Point(15, 546);
-			this.comboBox2.Name = "comboBox2";
-			this.comboBox2.Size = new System.Drawing.Size(121, 21);
-			this.comboBox2.TabIndex = 9;
+			this.levelThemeComboBox.Location = new System.Drawing.Point(15, 546);
+			this.levelThemeComboBox.Name = "levelThemeComboBox";
+			this.levelThemeComboBox.Size = new System.Drawing.Size(121, 21);
+			this.levelThemeComboBox.TabIndex = 9;
 			// 
 			// label4
 			// 
@@ -364,39 +275,67 @@
 			this.label4.Size = new System.Drawing.Size(69, 13);
 			this.label4.TabIndex = 10;
 			this.label4.Text = "Level Theme";
+			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			// 
+			// openFileDialog1
+			// 
+			this.openFileDialog1.FileName = "openFileDialog1";
+			// 
+			// plusButton
+			// 
+			this.plusButton.Location = new System.Drawing.Point(454, 545);
+			this.plusButton.Name = "plusButton";
+			this.plusButton.Size = new System.Drawing.Size(32, 32);
+			this.plusButton.TabIndex = 11;
+			this.plusButton.Text = "+";
+			this.plusButton.UseVisualStyleBackColor = true;
+			this.plusButton.Click += new System.EventHandler(this.plusButton_Click);
+			// 
+			// minusButton
+			// 
+			this.minusButton.Location = new System.Drawing.Point(492, 545);
+			this.minusButton.Name = "minusButton";
+			this.minusButton.Size = new System.Drawing.Size(32, 32);
+			this.minusButton.TabIndex = 12;
+			this.minusButton.Text = "-";
+			this.minusButton.UseVisualStyleBackColor = true;
+			this.minusButton.Click += new System.EventHandler(this.minusButton_Click);
+			// 
+			// label2
+			// 
+			this.label2.AutoSize = true;
+			this.label2.Location = new System.Drawing.Point(451, 580);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(75, 13);
+			this.label2.TabIndex = 13;
+			this.label2.Text = "Preview Scale";
 			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(1054, 602);
-			this.Controls.Add(this.label4);
-			this.Controls.Add(this.comboBox2);
-			this.Controls.Add(this.label3);
-			this.Controls.Add(this.textBox2);
 			this.Controls.Add(this.label2);
-			this.Controls.Add(this.textBox1);
+			this.Controls.Add(this.minusButton);
+			this.Controls.Add(this.plusButton);
+			this.Controls.Add(this.label4);
+			this.Controls.Add(this.levelThemeComboBox);
+			this.Controls.Add(this.xLabel);
+			this.Controls.Add(this.xTextBox);
+			this.Controls.Add(this.yAndAngleLabel);
+			this.Controls.Add(this.yAndAngleTextBox);
 			this.Controls.Add(this.label1);
-			this.Controls.Add(this.comboBox1);
+			this.Controls.Add(this.dragFuncComboBox);
 			this.Controls.Add(this.tabControl1);
 			this.Controls.Add(this.panel1);
 			this.Controls.Add(this.menuStrip1);
 			this.MainMenuStrip = this.menuStrip1;
 			this.Name = "Form1";
 			this.Text = "Drip Game Object Formation Editor";
+			this.Load += new System.EventHandler(this.Form1_Load);
 			this.menuStrip1.ResumeLayout(false);
 			this.menuStrip1.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-			this.panel1.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
 			this.tabControl1.ResumeLayout(false);
-			this.tabPage1.ResumeLayout(false);
-			this.tabPage2.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)(this.pictureBox7)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -409,33 +348,30 @@
 		private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem saveAsToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem undoToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem redoToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
-		private System.Windows.Forms.PictureBox pictureBox1;
 		private System.Windows.Forms.Panel panel1;
-		private System.Windows.Forms.PictureBox pictureBox2;
 		private System.Windows.Forms.TabControl tabControl1;
 		private System.Windows.Forms.TabPage tabPage1;
 		private System.Windows.Forms.TabPage tabPage2;
-		private System.Windows.Forms.PictureBox pictureBox3;
-		private System.Windows.Forms.PictureBox pictureBox7;
-		private System.Windows.Forms.PictureBox pictureBox6;
-		private System.Windows.Forms.PictureBox pictureBox5;
-		private System.Windows.Forms.PictureBox pictureBox4;
 		private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem1;
-		private System.Windows.Forms.ComboBox comboBox1;
+		private System.Windows.Forms.ComboBox dragFuncComboBox;
 		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.TextBox textBox1;
-		private System.Windows.Forms.Label label2;
-		private System.Windows.Forms.TextBox textBox2;
-		private System.Windows.Forms.Label label3;
-		private System.Windows.Forms.ComboBox comboBox2;
+		private System.Windows.Forms.TextBox yAndAngleTextBox;
+		private System.Windows.Forms.Label yAndAngleLabel;
+		private System.Windows.Forms.TextBox xTextBox;
+		private System.Windows.Forms.Label xLabel;
+		private System.Windows.Forms.ComboBox levelThemeComboBox;
 		private System.Windows.Forms.Label label4;
+		private System.Windows.Forms.SaveFileDialog saveFileDialog1;
+		private System.Windows.Forms.OpenFileDialog openFileDialog1;
+		private System.Windows.Forms.Button plusButton;
+		private System.Windows.Forms.Button minusButton;
+		private System.Windows.Forms.Label label2;
 	}
 }
 

@@ -10,14 +10,17 @@ public:
 	float width, height;
 	float angle;
 	float size;
-	float type;
+	int type;
+	int powerup;
+
+	ALLEGRO_BITMAP* sprite;
 
 	int frame;
 	int animationState;
 
-	void load(float type);
+	void load(int type);
 	void unload();
-	void draw(Camera camera, ALLEGRO_BITMAP* sprite);
+	void draw(Camera camera);
 	void update();
 
 	GameObject();
