@@ -184,35 +184,87 @@ void Game::updateFrame()
 
 		case GAME:
 		{
+			bool loadedFormations[6] = { false, false, false, false, false, false };
 			for (int i = 0; i < numFormations; i++)
 			{
-				if (formations[i].y <= player.y - 2048)
+				// If formations are 2048px above the top of the camera, get rid of them, since we're probably not going up that high.
+				if (formations[i].y <= camera.y - 2048)
 				{
 					removeFormation(i);
 					i--;
+					continue;
+				}
+
+				// Are the formations left, right, and center of the player loaded?
+				if ((int)(formations[i].y / 2048.0f) == (int)(player.y / 2048.0f) && player.y >= 2048.0f)
+				{
+					if ((int)(formations[i].x / 2048.0f) == (int)(player.x / 2048.0f) - 1)
+					{
+						loadedFormations[0] = true;
+					}
+					else if ((int)(formations[i].x / 2048.0f) == (int)(player.x / 2048.0f))
+					{
+						loadedFormations[1] = true;
+						player.currentFormation = i;
+					}
+					else if ((int)(formations[i].x / 2048.0f) == (int)(player.x / 2048.0f) + 1)
+					{
+						loadedFormations[2] = true;
+					}
+				}
+
+				// Are the formations down-left, down, and down-right of the player loaded?
+				else if ((int)(formations[i].y / 2048.0f) == (int)(player.y / 2048.0f) + 1)
+				{
+					if ((int)(formations[i].x / 2048.0f) == (int)(player.x / 2048.0f) - 1)
+					{
+						loadedFormations[3] = true;
+					}
+					else if ((int)(formations[i].x / 2048.0f) == (int)(player.x / 2048.0f))
+					{
+						loadedFormations[4] = true;
+					}
+					else if ((int)(formations[i].x / 2048.0f) == (int)(player.x / 2048.0f) + 1)
+					{
+						loadedFormations[5] = true;
+					}
 				}
 			}
 
-			// Player's entered a new chunk row
-			if (((int)player.trailY[0] / 2048) < ((int)player.y / 2048))
+			// Load in any formations that need loading
+			for (int i = 0; i < 6; i++)
 			{
-				int max = numFormations + 3;
-				for (int i = numFormations; i < max; i++)
+				// Don't bother checking the first row if the player's in the grace-chunk
+				if (player.y < 2048.0f && i < 3)
+				{
+					i = 3;
+				}
+				// This formation needs loading!
+				if (!loadedFormations[i])
 				{
 					if (numFormations >= formationsSize)
 					{
 						resizeFormations();
 					}
-					formations[i].load((((int)player.x / 2048) + ((i - (max - 3)) - 1)) * 2048, (((int)player.y / 2048) + 1) * 2048, obstacleSpr);
+					formations[numFormations].load((((int)player.x / 2048) + ((i % 3) - 1)) * 2048, (((int)player.y / 2048) + (i / 3)) * 2048, obstacleSpr, powerups);
 					numFormations++;
 				}
 			}
 
-			// Player's moved one column right
-			/*if (((int)player.trailX[0] / 2048) < ((int)player.x / 2048))
+			// Check collisions
+			if(player.currentFormation >= 0)
 			{
-
-			}*/
+				for (int i = 0; i < formations[player.currentFormation].numObjects; i++)
+				{
+					if (formations[player.currentFormation].objects[i].isColliding(player.x, player.y))
+					{
+						if (!formations[player.currentFormation].objects[i].powerup)
+						{
+							player.velocity = 0.0f;
+						}
+					}
+				}
+			}
 
 			al_use_shader(bgShader.shader);
 
@@ -299,9 +351,9 @@ void Game::load()
 			formationsSize = 4;
 
 			formations = new Formation[formationsSize];
-			formations[0].load(-2048, 2048, obstacleSpr);
-			formations[1].load(0, 2048, obstacleSpr);
-			formations[2].load(2048, 2048, obstacleSpr);
+			formations[0].load(-2048, 2048, obstacleSpr, powerups);
+			formations[1].load(0, 2048, obstacleSpr, powerups);
+			formations[2].load(2048, 2048, obstacleSpr, powerups);
 
 			break;
 		}
@@ -329,6 +381,8 @@ void Game::loadPowerupData()
 		path += convert.str();
 		path += ".png";
 		powerups[i] = al_load_bitmap(path.c_str());
+		convert.str(std::string());
+		convert.clear();
 	}
 }
 
@@ -350,6 +404,8 @@ void Game::loadObstacleData()
 				path += convert.str();
 				path += ".png";
 				obstacleSpr[i] = al_load_bitmap(path.c_str());
+				convert.str(std::string());
+				convert.clear();
 			}
 			break;
 		}

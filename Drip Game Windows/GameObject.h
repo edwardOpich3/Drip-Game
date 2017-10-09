@@ -22,6 +22,7 @@ public:
 	void unload();
 	void draw(Camera camera);
 	void update();
+	bool isColliding(float x, float y);
 
 	GameObject();
 	~GameObject();

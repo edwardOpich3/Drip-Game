@@ -9,7 +9,7 @@ public:
 	int numObjects;			// Number of objects in the formation
 	GameObject* objects = nullptr;	// Objects container
 
-	void load(int x, int y, ALLEGRO_BITMAP** obstacleSpr);
+	void load(int x, int y, ALLEGRO_BITMAP** obstacleSpr, ALLEGRO_BITMAP** powerupSpr);
 	void draw(Camera camera);
 	void unload();
 

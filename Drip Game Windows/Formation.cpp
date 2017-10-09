@@ -2,7 +2,7 @@
 #include "FormationReader.h"
 #include <fstream>
 
-void Formation::load(int x, int y, ALLEGRO_BITMAP** obstacleSpr)
+void Formation::load(int x, int y, ALLEGRO_BITMAP** obstacleSpr, ALLEGRO_BITMAP** powerupSpr)
 {
 	std::ifstream reader("data/obstacle formations/smile.fmt", std::ios::in | std::ios::binary | std::ios::ate);
 
@@ -41,19 +41,37 @@ void Formation::load(int x, int y, ALLEGRO_BITMAP** obstacleSpr)
 			reader.read((char*)temp, 4);
 			objects[i].y = FormationReader::readInt32(temp) + y;
 
-			// Scale (1 == 128 X 128)
+			// Scale (1 == 128 width)
 			reader.read((char*)temp, 4);
 			objects[i].size = FormationReader::readSingle(temp);
 
 			// Angle (0 is pointing down)
 			reader.read((char*)temp, 4);
-			objects[i].angle = FormationReader::readSingle(temp) + 270.0f;
+			objects[i].angle = FormationReader::readSingle(temp);
 
 			// Sprite (based on type)
-			objects[i].sprite = obstacleSpr[objects[i].type];
+			if (!objects[i].powerup)
+			{
+				objects[i].sprite = obstacleSpr[objects[i].type];
+			}
+			else
+			{
+				objects[i].sprite = powerupSpr[objects[i].type];
+			}
 
-			objects[i].width = 128.0f * objects[i].size;
-			objects[i].height = 128.0f * objects[i].size;
+			objects[i].width = objects[i].size;
+			objects[i].height = objects[i].size * (al_get_bitmap_height(objects[i].sprite) / al_get_bitmap_width(objects[i].sprite));	// Height is always proportional to width
+
+			if (!objects[i].powerup)
+			{
+				objects[i].width *= 128.0f;
+				objects[i].height *= 128.0f;
+			}
+			else
+			{
+				objects[i].width *= 32.0f;
+				objects[i].height *= 32.0f;
+			}
 		}
 		reader.close();
 	}
