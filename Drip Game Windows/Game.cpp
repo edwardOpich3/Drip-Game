@@ -1,5 +1,6 @@
 #include "Game.h"
 #include "allegro5/allegro_image.h"
+#include "allegro5/allegro_ttf.h"
 #include <string>
 #include <sstream>
 #include <fstream>
@@ -31,6 +32,8 @@ Formation* Game::formations;
 ALLEGRO_BITMAP* Game::background;
 ALLEGRO_BITMAP* Game::bgBuffer;
 ALLEGRO_BITMAP* Game::powerups[];
+
+ALLEGRO_FONT* Game::hudFont[];
 
 int Game::numObstacleSpr;
 ALLEGRO_BITMAP** Game::obstacleSpr;
@@ -85,6 +88,8 @@ bool Game::initialize()
 
 	// Initialize any addons
 	al_init_image_addon();
+	al_init_font_addon();
+	al_init_ttf_addon();
 
 	// Create the buffer bitmap
 	buffer = al_create_bitmap(1024, 768);
@@ -262,9 +267,55 @@ void Game::updateFrame()
 						{
 							player.velocity = 0.0f;
 						}
+						else
+						{
+							if (formations[player.currentFormation].objects[i].type < 3)
+							{
+								player.status = player.status | (int)std::pow(2, formations[player.currentFormation].objects[i].type);
+							}
+
+							// Multiplier
+							else if(formations[player.currentFormation].objects[i].type == 3)
+							{
+								int multiplier = (player.status >> 0x3) & 0x7;
+								multiplier++;
+
+								if (multiplier > 7)
+								{
+									multiplier = 7;
+								}
+
+
+								multiplier = multiplier << 0x3;
+
+								player.status = player.status & 0xC7;
+								player.status = player.status | multiplier;
+							}
+
+							// Lives
+							else if (formations[player.currentFormation].objects[i].type == 4)
+							{
+								int lives = (player.status >> 0x6) & 0x3;
+								lives++;
+
+								if (lives > 3)
+								{
+									lives = 3;
+								}
+
+								lives = lives << 0x6;
+
+								player.status = player.status & 0x3F;
+								player.status = player.status | lives;
+							}
+
+							formations[player.currentFormation].removeObject(i);
+						}
 					}
 				}
 			}
+			camera.update(player.x - 512, player.y - 64);
+			player.update(keys);
 
 			al_use_shader(bgShader.shader);
 
@@ -288,8 +339,44 @@ void Game::updateFrame()
 				formations[i].draw(camera);
 			}
 
-			camera.update(player.x - 512, player.y - 64);
-			player.update(keys, camera);
+			player.draw(camera);
+
+			// Draw the HUD
+			al_draw_text(hudFont[0], al_map_rgb(255, 255, 255), 128, 1, ALLEGRO_ALIGN_CENTRE, "SCORE");
+			al_draw_text(hudFont[0], al_map_rgb(255, 255, 255), 900, 1, ALLEGRO_ALIGN_CENTRE, "SIZE");
+
+			al_draw_textf(hudFont[1], al_map_rgb(255, 255, 255), 128, 32, ALLEGRO_ALIGN_CENTRE, "%08d", player.score);
+			al_draw_textf(hudFont[1], al_map_rgb(255, 255, 255), 900, 32, ALLEGRO_ALIGN_CENTRE, "%1.6f", player.size);
+
+			for (int i = 0; i < 8; i++)
+			{
+				if (i < 3)
+				{
+					if (player.status & (int)std::pow(2, i))
+					{
+						al_draw_bitmap(powerups[i], 37 + (i * 32), 80, NULL);
+					}
+				}
+				else if (i < 6)
+				{
+					int multiplier = (player.status >> 0x3) & 0x7;
+					if (multiplier)
+					{
+						al_draw_textf(hudFont[2], al_map_rgb(255, 255, 255), 37 + (i * 32), 80, NULL, "%dX", multiplier + 1);
+					}
+					i = 6;
+				}
+				else
+				{
+					int lives = (player.status >> 0x6) & 0x3;
+					if (lives)
+					{
+						al_draw_bitmap(powerups[i - 3], 37 + ((i - 3) * 32), 80, NULL);
+						al_draw_textf(hudFont[2], al_map_rgb(255, 255, 255), 64 + ((i - 3) * 32), 80, NULL, "x%d", lives);
+					}
+					break;
+				}
+			}
 			break;
 		}
 	}
@@ -346,6 +433,9 @@ void Game::load()
 			camera.init();
 			player.init();
 			bgShader.load(display, "shaders/Vertex Shader", "shaders/BG Pixel Shader");
+			hudFont[0] = al_load_ttf_font("data/fonts/hud.ttf", 26, NULL);
+			hudFont[1] = al_load_ttf_font("data/fonts/hud.ttf", 34, NULL);
+			hudFont[2] = al_load_ttf_font("data/fonts/hudBold.ttf", 22, NULL);
 
 			numFormations = 3;
 			formationsSize = 4;
@@ -448,6 +538,9 @@ void Game::unload()
 			unloadObstacleData();
 			player.unload();
 			bgShader.unload();
+			al_destroy_font(hudFont[0]);
+			al_destroy_font(hudFont[1]);
+			al_destroy_font(hudFont[2]);
 
 			for (int i = 0; i < numFormations; i++)
 			{

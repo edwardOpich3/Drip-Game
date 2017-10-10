@@ -51,7 +51,7 @@ void Player::draw(Camera camera)
 	al_draw_scaled_rotated_bitmap(sprite, (al_get_bitmap_width(sprite) / 2.0f), (al_get_bitmap_height(sprite) / 2.0f), x - camera.x, y - camera.y, (size * width) / al_get_bitmap_width(sprite), (size * height) / al_get_bitmap_height(sprite), -angle * (ALLEGRO_PI / 180.0f), NULL);
 }
 
-void Player::update(bool* keys, Camera camera)
+void Player::update(bool* keys)
 {
 	for (int i = trailNum - 1; i > 0; i--)
 	{
@@ -95,7 +95,10 @@ void Player::update(bool* keys, Camera camera)
 		}
 	}
 
-	draw(camera);
+	if (y > 0)
+	{
+		score += size * velocity * (((status >> 0x3) & 0x7) + 1);
+	}
 }
 
 Player::Player()

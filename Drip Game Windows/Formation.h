@@ -11,6 +11,7 @@ public:
 
 	void load(int x, int y, ALLEGRO_BITMAP** obstacleSpr, ALLEGRO_BITMAP** powerupSpr);
 	void draw(Camera camera);
+	void removeObject(int index);
 	void unload();
 
 	Formation();

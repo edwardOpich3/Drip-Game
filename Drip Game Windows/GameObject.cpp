@@ -27,21 +27,35 @@ void GameObject::draw(Camera camera)
 
 bool GameObject::isColliding(float x, float y)
 {
-	switch (type)
+	// Obstacles may have unique collision
+	if (!powerup)
 	{
-		// Clock
-		case 0:
+		switch (type)
 		{
-			if (std::sqrtf(std::pow(x - this->x, 2) + std::pow(y - this->y, 2)) < (width / 2.0f))
+			// Clock
+			case 0:
 			{
-				return true;
+				if (std::sqrtf(std::pow(x - this->x, 2) + std::pow(y - this->y, 2)) < (width / 2.0f))
+				{
+					return true;
+				}
+				return false;
 			}
-			return false;
+			default:
+			{
+				return false;
+			}
 		}
-		default:
+	}
+
+	// All powerups have the same collision
+	else
+	{
+		if (std::sqrtf(std::pow(x - this->x, 2) + std::pow(y - this->y, 2)) < (width / 2.0f))
 		{
-			return false;
+			return true;
 		}
+		return false;
 	}
 }
 

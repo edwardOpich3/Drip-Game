@@ -36,7 +36,7 @@ public:
 	void init();	// Initializes the player and loads any necessary data.
 	void unload();	// Unloads anything necessary from memory.
 	void draw(Camera camera);	// Draws the player to the screen
-	void update(bool* keys, Camera camera);	// Updates the player's position and stuff
+	void update(bool* keys);	// Updates the player's position and stuff
 
 	Player();
 	~Player();

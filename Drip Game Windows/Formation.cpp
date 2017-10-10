@@ -85,6 +85,16 @@ void Formation::draw(Camera camera)
 	}
 }
 
+void Formation::removeObject(int index)
+{
+	for (int i = index; i < numObjects; i++)
+	{
+		objects[i] = objects[i + 1];
+	}
+
+	numObjects--;
+}
+
 void Formation::unload()
 {
 	if (objects != nullptr)

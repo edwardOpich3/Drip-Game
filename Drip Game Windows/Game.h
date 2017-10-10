@@ -1,5 +1,6 @@
 #pragma once
 #include "allegro5/allegro.h"
+#include "allegro5/allegro_font.h"
 #include "Player.h"
 #include "Camera.h"
 #include "Shader.h"
@@ -30,6 +31,8 @@ public:
 	static ALLEGRO_BITMAP* background;
 	static ALLEGRO_BITMAP* bgBuffer;
 	static ALLEGRO_BITMAP* powerups[5];
+
+	static ALLEGRO_FONT* hudFont[3];
 
 	static int numObstacleSpr;
 	static ALLEGRO_BITMAP** obstacleSpr;
