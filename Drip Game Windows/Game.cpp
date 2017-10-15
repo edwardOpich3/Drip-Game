@@ -5,10 +5,11 @@
 #include <sstream>
 #include <fstream>
 
-enum GAME_STATE { SPLASH, TITLE, GAME };
-enum KEYS { LEFT, RIGHT };
-enum OBSTACLES { CLOCK };
-enum POWERUPS { FAST, SLOW, SIZE, TIME, LIFE };
+// Enums (TODO: Move certain enums to appropriate classes, if possible)
+enum GAME_STATE { SPLASH, TITLE, GAME };	// Current game state
+enum KEYS { LEFT, RIGHT };					// Keycodes for the keyboard
+enum OBSTACLES { CLOCK };					// Obstacle codes (TODO: Get rid of this? Or find a way to make it apply to the multiple themes)
+enum POWERUPS { FAST, SLOW, SIZE, TIME, LIFE };	// Powerup codes
 
 ALLEGRO_DISPLAY* Game::display;
 ALLEGRO_EVENT_QUEUE* Game::event;
@@ -52,7 +53,6 @@ bool Game::initialize()
 
 	// Initialize a window of size 1024 X 768, check for success
 	display = al_create_display(1024, 768);
-
 	if (!display)
 	{
 		return false;
@@ -60,7 +60,6 @@ bool Game::initialize()
 
 	// Initialize the event queue, check for success
 	event = al_create_event_queue();
-
 	if (!event)
 	{
 		return false;
@@ -77,7 +76,6 @@ bool Game::initialize()
 
 	// Set a timer to have the game's framerate set at 60, check for success
 	timer = al_create_timer(1.0f / 60.0f);
-
 	if (!timer)
 	{
 		return false;
@@ -91,11 +89,11 @@ bool Game::initialize()
 	al_init_font_addon();
 	al_init_ttf_addon();
 
-	// Create the buffer bitmap
+	// Create the buffer bitmaps
 	buffer = al_create_bitmap(1024, 768);
 	bgBuffer = al_create_bitmap(1024, 768);
 
-	// Various game loop variables
+	// Initialize various game loop variables
 	quit = false;
 	update = false;
 	state = GAME;
@@ -119,12 +117,14 @@ void Game::handleEvents()
 	// Parse event type, react accordingly
 	switch (e.type)
 	{
+		// If the close button was pressed
 		case ALLEGRO_EVENT_DISPLAY_CLOSE:
 		{
 			quit = true;
 			break;
 		}
 
+		// Check keys pressed this frame
 		case ALLEGRO_EVENT_KEY_DOWN:
 		{
 			if (e.keyboard.keycode == ALLEGRO_KEY_ESCAPE)
@@ -142,6 +142,7 @@ void Game::handleEvents()
 			break;
 		}
 
+		// Check keys released this frame
 		case ALLEGRO_EVENT_KEY_UP:
 		{
 			if (e.keyboard.keycode == ALLEGRO_KEY_LEFT)
@@ -154,6 +155,7 @@ void Game::handleEvents()
 			}
 		}
 
+		// Check if the timer has run out
 		case ALLEGRO_EVENT_TIMER:
 		{
 			// Check if the timer in question is in fact the update timer
@@ -166,17 +168,20 @@ void Game::handleEvents()
 	}
 }
 
+// TODO: Separate the draw calls in updateFrame to their own function, drawFrame!
 void Game::updateFrame()
 {
-	// Ensure the frame isn't updated again before next frame
+	// Ensure the frame isn't updated again before next frame update
 	update = false;
 
 	// Do any drawing to the buffer
 	al_set_target_bitmap(Game::buffer);
 	al_clear_to_color(al_map_rgb(128, 128, 128));
 
+	// Vary drawing procedure based on current game state
 	switch (state)
 	{
+		// TODO: Implement splash screen and title screen!
 		case SPLASH:
 		{
 			break;
@@ -189,6 +194,7 @@ void Game::updateFrame()
 
 		case GAME:
 		{
+			// Check if formations around the player have been loaded
 			bool loadedFormations[6] = { false, false, false, false, false, false };
 			for (int i = 0; i < numFormations; i++)
 			{
@@ -257,18 +263,43 @@ void Game::updateFrame()
 			}
 
 			// Check collisions
+			bool colliding = false;
 			if(player.currentFormation >= 0)
 			{
+				// For every object in the formation the player is currently in
 				for (int i = 0; i < formations[player.currentFormation].numObjects; i++)
 				{
+					// Are we colliding with the current object?
 					if (formations[player.currentFormation].objects[i].isColliding(player.x, player.y))
 					{
+						// If so, is it an obstacle?
 						if (!formations[player.currentFormation].objects[i].powerup)
 						{
-							player.velocity = 0.0f;
+							colliding = true;
+
+							// If not currently in invincibility frames, update our status accordingly!
+							if (!player.isInvincible)
+							{
+								int lives = (player.status >> 0x6) & 0x3;
+								lives--;
+
+								if (lives < 0)
+								{
+									lives = 0;
+									player.isDead = true;
+								}
+
+								lives = lives << 0x6;
+
+								player.status = player.status & 0x3F;
+								player.status = player.status | lives;
+							}
 						}
+
+						// Update our status based on what kind of powerup it was
 						else
 						{
+							// Lightning bolt, shell, paint bucket
 							if (formations[player.currentFormation].objects[i].type < 3)
 							{
 								player.status = player.status | (int)std::pow(2, formations[player.currentFormation].objects[i].type);
@@ -309,14 +340,30 @@ void Game::updateFrame()
 								player.status = player.status | lives;
 							}
 
+							// Remove the powerup from play
 							formations[player.currentFormation].removeObject(i);
 						}
 					}
 				}
 			}
-			camera.update(player.x - 512, player.y - 64);
-			player.update(keys);
 
+			// If we aren't colliding with any obstacles, remove our invincibility frames!
+			if (!colliding)
+			{
+				player.isInvincible = false;
+			}
+			else
+			{
+				player.isInvincible = true;
+			}
+
+			// Update the player based on the keyboard state, move the camera to the player's position
+			player.update(keys);
+			camera.update(player.x - 512, player.y - 64);
+
+			/* DRAW CALLS BEGIN HERE */
+
+			// Set up the shader to draw the infinite BG
 			al_use_shader(bgShader.shader);
 
 			float texSize[2] = { (float)al_get_bitmap_width(background), (float)al_get_bitmap_height(background) };
@@ -330,15 +377,19 @@ void Game::updateFrame()
 			float cameraPos[2] = { (float)camera.x, (float)camera.y };
 			al_set_shader_float_vector("cameraPos", 2, cameraPos, 1);
 
+			// Draw the infinite BG
 			al_draw_bitmap(bgBuffer, 0, 0, NULL);
 
 			al_use_shader(NULL);
 
+			// For every formation loaded, draw all of its obstacles
+			// TODO: Optimize this so that only obstacles within the bounds of the camera are being drawn!
 			for (int i = 0; i < numFormations; i++)
 			{
 				formations[i].draw(camera);
 			}
 
+			// Draw the player
 			player.draw(camera);
 
 			// Draw the HUD
@@ -348,6 +399,7 @@ void Game::updateFrame()
 			al_draw_textf(hudFont[1], al_map_rgb(255, 255, 255), 128, 32, ALLEGRO_ALIGN_CENTRE, "%08d", player.score);
 			al_draw_textf(hudFont[1], al_map_rgb(255, 255, 255), 900, 32, ALLEGRO_ALIGN_CENTRE, "%1.6f", player.size);
 
+			// Figure out which images to draw to the HUD based on the player's current status
 			for (int i = 0; i < 8; i++)
 			{
 				if (i < 3)
@@ -387,6 +439,7 @@ void Game::updateFrame()
 	al_flip_display();
 }
 
+// TODO: This function belongs in a custom container class!
 void Game::resizeFormations()
 {
 	formationsSize *= 2;
@@ -401,6 +454,7 @@ void Game::resizeFormations()
 	formations = temp;
 }
 
+// TODO: This function belongs in a custom container class!
 void Game::removeFormation(int index)
 {
 	formations[index].unload();
@@ -417,6 +471,7 @@ void Game::load()
 {
 	switch (state)
 	{
+		// TODO: Implement loading for splash and title screens!
 		case SPLASH:
 		{
 			break;
@@ -425,6 +480,8 @@ void Game::load()
 		{
 			break;
 		}
+
+		// TODO: Clean this up, if possible!
 		case GAME:
 		{
 			loadBG();
@@ -440,6 +497,7 @@ void Game::load()
 			numFormations = 3;
 			formationsSize = 4;
 
+			// Create the formations container, and place the first 3 formations at the row below the player
 			formations = new Formation[formationsSize];
 			formations[0].load(-2048, 2048, obstacleSpr, powerups);
 			formations[1].load(0, 2048, obstacleSpr, powerups);

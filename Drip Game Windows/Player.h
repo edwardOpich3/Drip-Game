@@ -17,6 +17,8 @@ public:
 	float time;	// In seconds, do the required conversions for the UI
 	int score;	// A given, the score. Calculated based on many things, see the brainstorm doc.
 	char status;	// Use this as a flag, as it's essentially an array of 8 bools
+	bool isDead;	// Has the player collided with something?
+	bool isInvincible;	// If the player collided with something with an extra life, this is set til they stop colliding with the object.
 
 	int currentFormation;	// The index of the formation the player is currently in.
 

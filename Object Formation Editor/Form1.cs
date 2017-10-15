@@ -8,6 +8,7 @@ namespace Object_Formation_Editor
 {
 	public partial class Form1 : Form
 	{
+		// File I/O Objects
 		BinaryReader reader;
 		BinaryWriter writer;
 		Stream readStream;
@@ -39,6 +40,7 @@ namespace Object_Formation_Editor
 		{
 			InitializeComponent();
 
+			// Add some event handlers
 			panel1.DragEnter += panel1_DragEnter;
 			panel1.DragDrop += panel1_DragDrop;
 
@@ -83,6 +85,7 @@ namespace Object_Formation_Editor
 			background.Parent = panel1;
 			background.Image = Image.FromFile(Directory.GetFiles("data/bgs")[0]);
 
+			// Add some event handlers to the background
 			background.Paint += background_Paint;
 			background.MouseDown += background_MouseDown;
 			background.MouseUp += background_MouseUp;
@@ -104,6 +107,7 @@ namespace Object_Formation_Editor
 
 		private void dragFuncComboBox_SelectedIndexChanged(object sender, EventArgs e)
 		{
+			// Change the textboxes and their labels based on the new mouse-drag function
 			switch(dragFuncComboBox.SelectedIndex)
 			{
 				// Position
@@ -158,6 +162,7 @@ namespace Object_Formation_Editor
 		{
 			PictureBox myPictureBox = sender as PictureBox;
 
+			// Check if the mouse is actually clicking any of the objects in the current tab
 			powerup = tabControl1.SelectedIndex;
 			switch (powerup)
 			{
@@ -188,6 +193,7 @@ namespace Object_Formation_Editor
 				}
 			}
 
+			// Prepare to drag and drop the selected object!
 			myPictureBox.DoDragDrop(myPictureBox.Image.Clone(), DragDropEffects.Copy | DragDropEffects.Move);
 		}
 
@@ -242,6 +248,7 @@ namespace Object_Formation_Editor
 				height = 0;
 			}
 
+			// Update the textboxes' text based on the current mouse-drag function
 			switch (dragFuncComboBox.SelectedIndex)
 			{
 				case 0:
@@ -268,6 +275,7 @@ namespace Object_Formation_Editor
 
 		private void background_KeyDown(object sender, KeyEventArgs e)
 		{
+			// If the user hit the delete key and there was an object selected, delete it and clear the text boxes
 			if(e.KeyCode == Keys.Delete && selected >= 0)
 			{
 				objects[selected].sprite.Dispose();
@@ -312,6 +320,7 @@ namespace Object_Formation_Editor
 
 		private void yAndAngleTextBox_TextChanged(object sender, EventArgs e)
 		{
+			// Update the current selected object (if there is one) to the new value
 			switch(dragFuncComboBox.SelectedIndex)
 			{
 				// Position
@@ -372,7 +381,8 @@ namespace Object_Formation_Editor
 
 		private void xTextBox_TextChanged(object sender, EventArgs e)
 		{
-			switch(dragFuncComboBox.SelectedIndex)
+			// Update the current selected object (if there is one) to the new value
+			switch (dragFuncComboBox.SelectedIndex)
 			{
 				// Position
 				case 0:
@@ -417,11 +427,13 @@ namespace Object_Formation_Editor
 			}
 		}
 
+		// Returns mouse position relative to the top left of the formation display
 		private Point getMousePosInPanel()
 		{
 			return PointToClient(new Point(MousePosition.X + panel1.HorizontalScroll.Value - panel1.Location.X, MousePosition.Y + panel1.VerticalScroll.Value - panel1.Location.Y));
 		}
 
+		// Zooms in on the formation by a factor of 2
 		private void plusButton_Click(object sender, EventArgs e)
 		{
 			formationScale *= 2.0f;
@@ -441,7 +453,8 @@ namespace Object_Formation_Editor
 
 			background.Invalidate();
 		}
-
+		
+		// Zooms out on the formation by a factor of 2
 		private void minusButton_Click(object sender, EventArgs e)
 		{
 			formationScale /= 2.0f;

@@ -1,9 +1,10 @@
 #include "Player.h"
 #include <math.h>
 
-enum POWERUPS { MULTIPLIER = 3, FAST = 4, SLOW = 8, SIZE = 16, TIME = 32, LIFE = 192 };
-enum ANIMATION_STATE { IDLE, TURNING, HIT };
-enum KEYS { LEFT, RIGHT };
+// Enums
+enum POWERUPS { MULTIPLIER = 3, FAST = 4, SLOW = 8, SIZE = 16, TIME = 32, LIFE = 192 };	// TODO: Is this even used? Get rid of it if not!
+enum ANIMATION_STATE { IDLE, TURNING, HIT };	// Indices of the players animation states. Not yet implemented.
+enum KEYS { LEFT, RIGHT };						// Keycodes of keys pressed (TODO: This probably belongs in a keyboard class or something)
 
 const int Player::trailNum;
 
@@ -12,7 +13,7 @@ void Player::init()
 	x = 1024.0f, y = -512.0f;
 	width = 32.0f, height = 64.0f;
 	angle = 0.0f;	// Downwards
-	maxAngle = 45.0f, minAngle = -45.0f;	// Max is right, min is full left; balance this later
+	maxAngle = 45.0f, minAngle = -45.0f;	// Max turn is a 45 degree angle in either direction
 	velocity = 7.0f;
 	minVelocity = 5.0f, maxVelocity = 10.0f;
 	acceleration = 1.0f;
@@ -53,6 +54,13 @@ void Player::draw(Camera camera)
 
 void Player::update(bool* keys)
 {
+	// If the player is dead, make sure they don't move! The game is over!
+	if (isDead)
+	{
+		velocity = 0.0f;
+	}
+
+	// Update the paint trail particles
 	for (int i = trailNum - 1; i > 0; i--)
 	{
 		trailX[i] = trailX[i - 1];
@@ -61,11 +69,13 @@ void Player::update(bool* keys)
 		trailSize[i] = trailSize[i - 1];
 	}
 
+	// The first paint trail particle will be at the player's soon-to-be prior position
 	trailX[0] = x;
 	trailY[0] = y;
 	trailAngle[0] = angle;
 	trailSize[0] = size;
 
+	// Update position
 	x += sin(angle * (ALLEGRO_PI / 180.0f)) * velocity;
 	y += cos(angle * (ALLEGRO_PI / 180.0f)) * velocity;
 
@@ -78,6 +88,7 @@ void Player::update(bool* keys)
 		x = 1024;
 	}*/
 
+	// Check keys!
 	if (keys[LEFT])
 	{
 		angle -= 5.0f;
@@ -95,6 +106,7 @@ void Player::update(bool* keys)
 		}
 	}
 
+	// Don't update the score unless the player is on the screen!
 	if (y > 0)
 	{
 		score += size * velocity * (((status >> 0x3) & 0x7) + 1);

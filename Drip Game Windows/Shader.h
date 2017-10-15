@@ -5,11 +5,11 @@ class Shader
 {
 public:
 	
-	ALLEGRO_SHADER *shader;
+	ALLEGRO_SHADER *shader;	// Allegro Shader Object
 
 	// Don't pass extensions, the function will handle those
-	bool load(ALLEGRO_DISPLAY* display, std::string vertexPath, std::string pixelPath);
-	void unload();
+	bool load(ALLEGRO_DISPLAY* display, std::string vertexPath, std::string pixelPath);		// Load the shader
+	void unload();		// Unload the shader
 
 	Shader();
 	~Shader();

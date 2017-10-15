@@ -8,13 +8,17 @@ namespace Object_Formation_Editor
 {
 	public partial class Form1 : Form
 	{
+		// Drag drop event for the formation
 		private void panel1_DragDrop(object sender, DragEventArgs e)
 		{
+			// Is the thing being dropped an image?
 			if (e.Data.GetDataPresent(DataFormats.Bitmap))
 			{
+				// Add a new object, using the dropped image as the sprite
 				objects.Add(new Object());
 				objects[objects.Count - 1].sprite = e.Data.GetData(DataFormats.Bitmap) as Image;
 
+				// Set the object's bounds based on whether or not its a powerup
 				if (powerup == 0)
 				{
 					objects[objects.Count - 1].bounds = new Rectangle(getMousePosInPanel(), new Size((int)(128 * formationScale), (int)(128 * formationScale)));
@@ -24,11 +28,14 @@ namespace Object_Formation_Editor
 					objects[objects.Count - 1].bounds = new Rectangle(getMousePosInPanel(), new Size((int)(32 * formationScale), (int)(32 * formationScale)));
 				}
 
+				// Center the object around its X and Y position
 				objects[objects.Count - 1].bounds.X -= (objects[objects.Count - 1].Center.X);
 				objects[objects.Count - 1].bounds.Y -= (objects[objects.Count - 1].Center.Y);
-
+				
+				// Default angle is 0
 				objects[objects.Count - 1].angle = 0.0f;
 
+				// Set the object's scale based on whether or not it's a powerup
 				if (powerup == 0)
 				{
 					objects[objects.Count - 1].scale = (objects[objects.Count - 1].bounds.Width / 128.0f) / formationScale;
@@ -41,7 +48,10 @@ namespace Object_Formation_Editor
 				objects[objects.Count - 1].type = type;
 				objects[objects.Count - 1].powerup = powerup;
 
+				// The formation has been changed!
 				changed = true;
+				
+				// The current selected object is the one that was just created
 				selected = objects.Count - 1;
 
 				angle = objects[objects.Count - 1].angle;
@@ -59,6 +69,7 @@ namespace Object_Formation_Editor
 					height = (objects[objects.Count - 1].bounds.Height / 32.0f) / formationScale;
 				}
 
+				// Update the text boxes to display the newly created object's data
 				switch (dragFuncComboBox.SelectedIndex)
 				{
 					case 0:
@@ -82,14 +93,17 @@ namespace Object_Formation_Editor
 					}
 				}
 
+				// Refresh the formation
 				background.Invalidate();
 			}
 		}
 
 		private void background_MouseMove(object sender, EventArgs e)
 		{
+			// We don't care about mouse movement if the left mouse button isn't down, nor if there's nothing selected
 			if (leftMouseDown && selected >= 0)
 			{
+				// Operate on the selected object based on the current mouse-drag function
 				switch (dragFuncComboBox.SelectedIndex)
 				{
 					// Position
@@ -123,7 +137,7 @@ namespace Object_Formation_Editor
 							break;
 						}
 
-					// Scale
+					// Scale (TODO: There's a bug in here somewhere, see the GitHub Issue for more details!)
 					case 2:
 						{
 							System.Windows.Vector distance = new System.Windows.Vector(getMousePosInPanel().X - (objects[selected].bounds.X + objects[selected].Center.X), getMousePosInPanel().Y - (objects[selected].bounds.Y + objects[selected].Center.Y));
@@ -196,13 +210,16 @@ namespace Object_Formation_Editor
 			}
 		}
 
+		// Update the background
 		private void background_Paint(object sender, PaintEventArgs e)
 		{
+			// Draw four background images tiled across the whole formation
 			e.Graphics.DrawImage(background.Image, new Rectangle(new Point(0, 0), new Size((int)(1024.0f * formationScale), (int)(1024.0f * formationScale))));
 			e.Graphics.DrawImage(background.Image, new Rectangle(new Point((int)(1024.0f * formationScale), 0), new Size((int)(1024.0f * formationScale), (int)(1024.0f * formationScale))));
 			e.Graphics.DrawImage(background.Image, new Rectangle(new Point(0, (int)(1024.0f * formationScale)), new Size((int)(1024.0f * formationScale), (int)(1024.0f * formationScale))));
 			e.Graphics.DrawImage(background.Image, new Rectangle(new Point((int)(1024.0f * formationScale), (int)(1024.0f * formationScale)), new Size((int)(1024.0f * formationScale), (int)(1024.0f * formationScale))));
 
+			// Draw all of the objects
 			if (objects.Count > 0)
 			{
 				for (int i = 0; i < objects.Count; i++)
