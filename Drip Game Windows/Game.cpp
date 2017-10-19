@@ -1,4 +1,5 @@
 #include "Game.h"
+#include "Container.h"
 #include "allegro5/allegro_image.h"
 #include "allegro5/allegro_ttf.h"
 #include <string>
@@ -267,7 +268,7 @@ void Game::updateFrame()
 			if(player.currentFormation >= 0)
 			{
 				// For every object in the formation the player is currently in
-				for (int i = 0; i < formations[player.currentFormation].numObjects; i++)
+				for (int i = 0; i < formations[player.currentFormation].objects.count; i++)
 				{
 					// Are we colliding with the current object?
 					if (formations[player.currentFormation].objects[i].isColliding(player.x, player.y))
@@ -341,7 +342,7 @@ void Game::updateFrame()
 							}
 
 							// Remove the powerup from play
-							formations[player.currentFormation].removeObject(i);
+							formations[player.currentFormation].objects.remove(i);
 						}
 					}
 				}

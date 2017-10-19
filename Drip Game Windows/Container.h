@@ -4,7 +4,7 @@ class Container
 {
 private:
 
-	T* data;
+	T* data = nullptr;
 
 public:
 
@@ -37,7 +37,7 @@ public:
 
 	void resize()
 	{
-		T* temp = new temp[capacity * 2];
+		T* temp = new T[capacity * 2];
 		for (int i = 0; i < count; i++)
 		{
 			temp[i] = data[i];
@@ -45,9 +45,10 @@ public:
 		delete[] data;
 		data = nullptr;
 		data = temp;
+		capacity *= 2;
 	};
 
-	T operator[](int index)
+	T& operator[](int index)
 	{
 		if (index < count && index > -1)
 		{
@@ -57,7 +58,19 @@ public:
 		{
 			return T();
 		}
-	}
+	};
+
+	const T& operator[](int index) const
+	{
+		if (index < count && index > -1)
+		{
+			return data[index];
+		}
+		else
+		{
+			return T();
+		}
+	};
 
 	Container<T> operator=(const Container<T> &other)
 	{
@@ -76,7 +89,7 @@ public:
 		}
 
 		return *this;
-	}
+	};
 
 	Container()
 	{
@@ -93,6 +106,7 @@ public:
 	~Container()
 	{
 		delete[] data;
+		data = nullptr;
 	};
 };
 

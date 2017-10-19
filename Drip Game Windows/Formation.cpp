@@ -5,7 +5,7 @@
 void Formation::load(int x, int y, ALLEGRO_BITMAP** obstacleSpr, ALLEGRO_BITMAP** powerupSpr)
 {
 	// Hard-coded formation, later replace this with a random selection algorithm
-	std::ifstream reader("data/obstacle formations/smile.fmt", std::ios::in | std::ios::binary | std::ios::ate);
+	std::ifstream reader("data/obstacle formations/smile.fmt", std::ios::in | std::ios::binary);
 
 	// This function won't work if the path passed to the reader is invalid!
 	if (reader.is_open())
@@ -14,24 +14,16 @@ void Formation::load(int x, int y, ALLEGRO_BITMAP** obstacleSpr, ALLEGRO_BITMAP*
 		this->x = x;
 		this->y = y;
 
-		// Get the size of the formation, and calcuate the number of objects within based on that
-		int size = reader.tellg();
-		this->numObjects = size / 24;
-
-		reader.seekg(0, std::ios::beg);
 		unsigned char temp[4];
 
 		// If the formation was already defined but for some reason not unloaded, delete the object container
-		if (objects != nullptr)
-		{
-			delete[] objects;
-			objects = nullptr;
-		}
-		objects = new GameObject[numObjects];
+		objects.clear();
 
 		// Load each object into the formation
 		for (int i = 0; reader.peek() != -1; i++)
 		{
+			objects.push(GameObject());
+
 			// Powerup?
 			reader.read((char*)temp, 4);
 			objects[i].powerup = FormationReader::readInt32(temp);
@@ -87,34 +79,15 @@ void Formation::load(int x, int y, ALLEGRO_BITMAP** obstacleSpr, ALLEGRO_BITMAP*
 
 void Formation::draw(Camera camera)
 {
-	for (int i = 0; i < numObjects; i++)
+	for (int i = 0; i < objects.count; i++)
 	{
 		objects[i].draw(camera);
 	}
 }
 
-void Formation::removeObject(int index)
-{
-	// Move all objects past the index one left; this will overwrite the desired object to delete.
-	for (int i = index; i < numObjects; i++)
-	{
-		objects[i] = objects[i + 1];
-	}
-
-	numObjects--;
-}
-
 void Formation::unload()
 {
-	if (objects != nullptr)
-	{
-		delete[] objects;
-		objects = nullptr;
-	}
-
-	numObjects = 0;
-	x = 0;
-	y = 0;
+	objects.clear();
 }
 
 Formation::Formation()
