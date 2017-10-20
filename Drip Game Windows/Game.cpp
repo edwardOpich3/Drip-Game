@@ -27,9 +27,7 @@ Player Game::player;
 Camera Game::camera;
 Shader Game::bgShader;
 
-int Game::numFormations;
-int Game::formationsSize;
-Formation* Game::formations;
+Container<Formation> Game::formations;
 
 ALLEGRO_BITMAP* Game::background;
 ALLEGRO_BITMAP* Game::bgBuffer;
@@ -197,12 +195,13 @@ void Game::updateFrame()
 		{
 			// Check if formations around the player have been loaded
 			bool loadedFormations[6] = { false, false, false, false, false, false };
-			for (int i = 0; i < numFormations; i++)
+			for (int i = 0; i < formations.count; i++)
 			{
 				// If formations are 2048px above the top of the camera, get rid of them, since we're probably not going up that high.
 				if (formations[i].y <= camera.y - 2048)
 				{
-					removeFormation(i);
+					formations[i].unload();
+					formations.remove(i);
 					i--;
 					continue;
 				}
@@ -254,12 +253,12 @@ void Game::updateFrame()
 				// This formation needs loading!
 				if (!loadedFormations[i])
 				{
-					if (numFormations >= formationsSize)
+					if (formations.count >= formations.capacity)
 					{
-						resizeFormations();
+						formations.resize();
 					}
-					formations[numFormations].load((((int)player.x / 2048) + ((i % 3) - 1)) * 2048, (((int)player.y / 2048) + (i / 3)) * 2048, obstacleSpr, powerups);
-					numFormations++;
+					formations[formations.count].load((((int)player.x / 2048) + ((i % 3) - 1)) * 2048, (((int)player.y / 2048) + (i / 3)) * 2048, obstacleSpr, powerups);
+					formations.count++;
 				}
 			}
 
@@ -385,7 +384,7 @@ void Game::updateFrame()
 
 			// For every formation loaded, draw all of its obstacles
 			// TODO: Optimize this so that only obstacles within the bounds of the camera are being drawn!
-			for (int i = 0; i < numFormations; i++)
+			for (int i = 0; i < formations.count; i++)
 			{
 				formations[i].draw(camera);
 			}
@@ -440,34 +439,6 @@ void Game::updateFrame()
 	al_flip_display();
 }
 
-// TODO: This function belongs in a custom container class!
-void Game::resizeFormations()
-{
-	formationsSize *= 2;
-	Formation* temp = new Formation[formationsSize];
-	for (int i = 0; i < formationsSize / 2; i++)
-	{
-		temp[i] = formations[i];
-	}
-
-	delete[] formations;
-	formations = nullptr;
-	formations = temp;
-}
-
-// TODO: This function belongs in a custom container class!
-void Game::removeFormation(int index)
-{
-	formations[index].unload();
-
-	for (int i = index; i < numFormations; i++)
-	{
-		formations[i] = formations[i + 1];
-	}
-
-	numFormations--;
-}
-
 void Game::load()
 {
 	switch (state)
@@ -495,11 +466,11 @@ void Game::load()
 			hudFont[1] = al_load_ttf_font("data/fonts/hud.ttf", 34, NULL);
 			hudFont[2] = al_load_ttf_font("data/fonts/hudBold.ttf", 22, NULL);
 
-			numFormations = 3;
-			formationsSize = 4;
-
 			// Create the formations container, and place the first 3 formations at the row below the player
-			formations = new Formation[formationsSize];
+			for (int i = 0; i < 3; i++)
+			{
+				formations.push(Formation());
+			}
 			formations[0].load(-2048, 2048, obstacleSpr, powerups);
 			formations[1].load(0, 2048, obstacleSpr, powerups);
 			formations[2].load(2048, 2048, obstacleSpr, powerups);
@@ -601,11 +572,10 @@ void Game::unload()
 			al_destroy_font(hudFont[1]);
 			al_destroy_font(hudFont[2]);
 
-			for (int i = 0; i < numFormations; i++)
+			for (int i = 0; i < formations.count; i++)
 			{
 				formations[i].unload();
 			}
-			delete[] formations;
 
 			break;
 		}

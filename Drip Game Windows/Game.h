@@ -26,10 +26,8 @@ public:
 	static Camera camera;
 	static Shader bgShader;	// Infinite scrolling BG shader
 
-	// Formations (TODO: Create a custom container class, and move all of this to it!)
-	static int numFormations;		// Number of formations currently loaded
-	static int formationsSize;		// Number of formations that can currently be held
-	static Formation* formations;	// Container of object formations
+	// Formations
+	static Container<Formation> formations;	// Container of object formations
 
 	// Various bitmaps
 	static ALLEGRO_BITMAP* background;	// The background graphic to draw
@@ -47,10 +45,6 @@ public:
 	static bool initialize();
 	static void handleEvents();
 	static void updateFrame();
-
-	// TODO: Move this to the formations container when you make it!
-	static void resizeFormations();
-	static void removeFormation(int index);
 
 	// Loading
 	static void load();	// Loads everything for gameplay (TODO: Name change, or set it up to load different states)
