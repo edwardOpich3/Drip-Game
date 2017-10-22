@@ -13,7 +13,10 @@ public:
 	void draw(Camera camera);																// Draws all objects in the formation
 	void unload();						// Destroys the objects container
 
+	Formation operator=(const Formation& other);
+
 	Formation();
+	Formation(const Formation& other);
 	~Formation();
 };
 

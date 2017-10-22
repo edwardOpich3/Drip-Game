@@ -90,10 +90,24 @@ void Formation::unload()
 	objects.clear();
 }
 
+Formation Formation::operator=(const Formation& other)
+{
+	x = other.x;
+	y = other.y;
+	objects = other.objects;
+	return *this;
+}
+
 Formation::Formation()
 {
 }
 
+Formation::Formation(const Formation& other)
+{
+	x = other.x;
+	y = other.y;
+	objects = other.objects;
+}
 
 Formation::~Formation()
 {

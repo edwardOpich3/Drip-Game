@@ -253,12 +253,8 @@ void Game::updateFrame()
 				// This formation needs loading!
 				if (!loadedFormations[i])
 				{
-					if (formations.count >= formations.capacity)
-					{
-						formations.resize();
-					}
-					formations[formations.count].load((((int)player.x / 2048) + ((i % 3) - 1)) * 2048, (((int)player.y / 2048) + (i / 3)) * 2048, obstacleSpr, powerups);
-					formations.count++;
+					formations.push(Formation());
+					formations[formations.count - 1].load((((int)player.x / 2048) + ((i % 3) - 1)) * 2048, (((int)player.y / 2048) + (i / 3)) * 2048, obstacleSpr, powerups);
 				}
 			}
 

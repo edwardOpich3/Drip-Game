@@ -100,7 +100,13 @@ public:
 
 	Container(const Container<T> &other)
 	{
-		*this = other;
+		data = new T[other.capacity];
+		count = 0;
+		capacity = 1;
+		for (int i = 0; i < other.count; i++)
+		{
+			push(other[i]);
+		}
 	};
 
 	~Container()
