@@ -34,14 +34,12 @@ public:
 	// Various bitmaps
 	static ALLEGRO_BITMAP* background;	// The background graphic to draw
 	static ALLEGRO_BITMAP* bgBuffer;	// The buffer to draw to the screen in lieu of the background graphic
-	static ALLEGRO_BITMAP* powerups[5];	// The powerup bitmaps
+	static Container<ALLEGRO_BITMAP*> powerups;	// The powerup bitmaps
 
 	// Fonts
-	static ALLEGRO_FONT* hudFont[3];	// The fonts used for the HUD; size 26, size 34, size 22 bold
+	static Container<ALLEGRO_FONT*> hudFont;	// The fonts used for the HUD; size 26, size 34, size 22 bold
 
-	// Obstacle Sprites (TODO: Put this all in a container class!)
-	static int numObstacleSpr;			// Number of obstacle sprites loaded
-	static ALLEGRO_BITMAP** obstacleSpr;// Container of obstacle bitmaps
+	static Container<ALLEGRO_BITMAP*> obstacleSpr;	// Container of obstacle bitmaps
 
 	// Core engine functions
 	static bool initialize();
@@ -49,7 +47,7 @@ public:
 	static void updateFrame();
 
 	// Loading
-	static void load();	// Loads everything for gameplay (TODO: Name change, or set it up to load different states)
+	static void load();	// Loads everything
 	static void loadGraphics();			// Loads all graphics
 	static void loadBG();				// Loads the background graphic
 	static void loadPowerupData();		// Loads powerup sprites

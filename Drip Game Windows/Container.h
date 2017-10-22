@@ -1,4 +1,5 @@
 #pragma once
+#include <stdexcept>
 template <class T>
 class Container
 {
@@ -56,7 +57,7 @@ public:
 		}
 		else
 		{
-			return T();
+			throw(std::out_of_range("Index is out of bounds!"));
 		}
 	};
 
@@ -68,7 +69,7 @@ public:
 		}
 		else
 		{
-			return T();
+			throw(std::out_of_range("Index is out of bounds!"));
 		}
 	};
 

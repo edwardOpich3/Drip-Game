@@ -31,12 +31,11 @@ Container<Formation> Game::formations;
 
 ALLEGRO_BITMAP* Game::background;
 ALLEGRO_BITMAP* Game::bgBuffer;
-ALLEGRO_BITMAP* Game::powerups[];
+Container<ALLEGRO_BITMAP*> Game::powerups;
 
-ALLEGRO_FONT* Game::hudFont[];
+Container<ALLEGRO_FONT*> Game::hudFont;
 
-int Game::numObstacleSpr;
-ALLEGRO_BITMAP** Game::obstacleSpr;
+Container<ALLEGRO_BITMAP*> Game::obstacleSpr;
 
 bool Game::initialize()
 {
@@ -456,9 +455,9 @@ void Game::load()
 			camera.init();
 			player.init();
 			bgShader.load(display, "shaders/Vertex Shader", "shaders/BG Pixel Shader");
-			hudFont[0] = al_load_ttf_font("data/fonts/hud.ttf", 26, NULL);
-			hudFont[1] = al_load_ttf_font("data/fonts/hud.ttf", 34, NULL);
-			hudFont[2] = al_load_ttf_font("data/fonts/hudBold.ttf", 22, NULL);
+			hudFont.push(al_load_ttf_font("data/fonts/hud.ttf", 26, NULL));
+			hudFont.push(al_load_ttf_font("data/fonts/hud.ttf", 34, NULL));
+			hudFont.push(al_load_ttf_font("data/fonts/hudBold.ttf", 22, NULL));
 
 			// Create the formations container, and place the first 3 formations at the row below the player
 			for (int i = 0; i < 3; i++)
@@ -501,7 +500,7 @@ void Game::loadPowerupData()
 		convert << i;
 		path += convert.str();
 		path += ".png";
-		powerups[i] = al_load_bitmap(path.c_str());
+		powerups.push(al_load_bitmap(path.c_str()));
 		convert.str(std::string());
 		convert.clear();
 	}
@@ -516,15 +515,14 @@ void Game::loadObstacleData()
 	{
 		case 1:
 		{
-			numObstacleSpr = 1;
-			obstacleSpr = new ALLEGRO_BITMAP*[numObstacleSpr];
-			for (int i = 0; i < numObstacleSpr; i++)
+			obstacleSpr.clear();
+			for (int i = 0; i < 1; i++)	// TODO: This loop is kind of hacky, fix it later!
 			{
 				path = "data/sprites/obstacles/";
 				convert << i;
 				path += convert.str();
 				path += ".png";
-				obstacleSpr[i] = al_load_bitmap(path.c_str());
+				obstacleSpr.push(al_load_bitmap(path.c_str()));
 				convert.str(std::string());
 				convert.clear();
 			}
@@ -549,11 +547,10 @@ void Game::unloadPowerupData()
 
 void Game::unloadObstacleData()
 {
-	for (int i = 0; i < numObstacleSpr; i++)
+	for (int i = 0; i < 1; i++)
 	{
 		al_destroy_bitmap(obstacleSpr[i]);
 	}
-	delete obstacleSpr;
 }
 
 void Game::unload()

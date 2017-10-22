@@ -2,7 +2,7 @@
 #include "FormationReader.h"
 #include <fstream>
 
-void Formation::load(int x, int y, ALLEGRO_BITMAP** obstacleSpr, ALLEGRO_BITMAP** powerupSpr)
+void Formation::load(int x, int y, Container<ALLEGRO_BITMAP*> obstacleSpr, Container<ALLEGRO_BITMAP*> powerupSpr)
 {
 	// Hard-coded formation, later replace this with a random selection algorithm
 	std::ifstream reader("data/obstacle formations/smile.fmt", std::ios::in | std::ios::binary);
