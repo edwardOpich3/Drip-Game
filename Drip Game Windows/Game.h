@@ -9,6 +9,8 @@ class Game
 {
 public:
 
+	// TODO: Consider putting all loading and unloading functions except for load and unload in an IO class!
+
 	// Necessary objects for the allegro program to run
 	static ALLEGRO_DISPLAY* display;
 	static ALLEGRO_EVENT_QUEUE* event;
@@ -48,16 +50,14 @@ public:
 
 	// Loading
 	static void load();	// Loads everything for gameplay (TODO: Name change, or set it up to load different states)
-
-	// TODO: If possible, merge these three into a "loadGraphics" function!
-	static void loadBG();	// Loads the background graphic
+	static void loadGraphics();			// Loads all graphics
+	static void loadBG();				// Loads the background graphic
 	static void loadPowerupData();		// Loads powerup sprites
 	static void loadObstacleData();		// Loads obstacle sprites
 
 	// Unloading
 	static void unload();				// Unloads everything
-
-	// TODO: Merge these into a "unloadGraphics" function!
+	static void unloadGraphics();		// Unloads all graphics
 	static void unloadPowerupData();	// Destroys powerup sprites
 	static void unloadObstacleData();	// Destroys obstacle sprites
 

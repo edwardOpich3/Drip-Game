@@ -11,7 +11,7 @@ public:
 
 	void load(int x, int y, ALLEGRO_BITMAP** obstacleSpr, ALLEGRO_BITMAP** powerupSpr);		// Loads the formation with objects and places it at (x, y)
 	void draw(Camera camera);																// Draws all objects in the formation
-	void unload();						// Destroys the objects container
+	void unload();		// Destroys the objects container
 
 	Formation operator=(const Formation& other);
 

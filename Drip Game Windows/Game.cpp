@@ -452,9 +452,7 @@ void Game::load()
 		// TODO: Clean this up, if possible!
 		case GAME:
 		{
-			loadBG();
-			loadPowerupData();
-			loadObstacleData();
+			loadGraphics();
 			camera.init();
 			player.init();
 			bgShader.load(display, "shaders/Vertex Shader", "shaders/BG Pixel Shader");
@@ -474,6 +472,13 @@ void Game::load()
 			break;
 		}
 	}
+}
+
+void Game::loadGraphics()
+{
+	loadBG();
+	loadPowerupData();
+	loadObstacleData();
 }
 
 void Game::loadBG()
@@ -528,6 +533,12 @@ void Game::loadObstacleData()
 	}
 }
 
+void Game::unloadGraphics()
+{
+	unloadPowerupData();
+	unloadObstacleData();
+}
+
 void Game::unloadPowerupData()
 {
 	for (int i = 0; i < 5; i++)
@@ -560,8 +571,7 @@ void Game::unload()
 		case GAME:
 		{
 			al_destroy_bitmap(background);
-			unloadPowerupData();
-			unloadObstacleData();
+			unloadGraphics();
 			player.unload();
 			bgShader.unload();
 			al_destroy_font(hudFont[0]);
