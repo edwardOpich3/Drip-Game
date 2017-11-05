@@ -127,7 +127,6 @@
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Formation.cpp" />
-    <ClCompile Include="FormationReader.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -138,7 +137,6 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Container.h" />
     <ClInclude Include="Formation.h" />
-    <ClInclude Include="FormationReader.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Player.h" />

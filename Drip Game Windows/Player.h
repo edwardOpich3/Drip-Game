@@ -11,7 +11,7 @@ public:
 
 	float maxAngle, minAngle;	// Maximum and minimum angles of rotation. Determines how fast left and right the player can move.
 	float velocity;	// Current pixels per second. This isn't just the y component, this is total velocity. Use trig to get components until i get less lazy and make a vector object
-	float minVelocity, maxVelocity;	// Pixels per second, variable due to powerups
+	float minVelocity, midVelocity, maxVelocity;	// Pixels per second, variable due to powerups
 	float acceleration;	// Pixels per second^2, varies based on powerups. How fast the player can manually change speed, or how fast the drip accelerates at level start.
 	float size;	// Stored as scale, with 1.0f being 1x size, 2.0f being 2x size, 0.5f being half size, etc.
 	float time;	// In seconds, do the required conversions for the UI

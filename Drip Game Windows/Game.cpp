@@ -8,9 +8,7 @@
 
 // Enums (TODO: Move certain enums to appropriate classes, if possible)
 enum GAME_STATE { SPLASH, TITLE, GAME };	// Current game state
-enum KEYS { LEFT, RIGHT };					// Keycodes for the keyboard
-enum OBSTACLES { CLOCK };					// Obstacle codes (TODO: Get rid of this? Or find a way to make it apply to the multiple themes)
-enum POWERUPS { FAST, SLOW, SIZE, TIME, LIFE };	// Powerup codes
+enum KEYS { LEFT, RIGHT, UP, DOWN };					// Keycodes for the keyboard
 
 ALLEGRO_DISPLAY* Game::display;
 ALLEGRO_EVENT_QUEUE* Game::event;
@@ -20,7 +18,7 @@ ALLEGRO_BITMAP* Game::buffer;
 bool Game::quit;
 bool Game::update;
 char Game::state;
-bool Game::keys[] = { false, false };
+bool Game::keys[] = { false, false, false, false };
 int Game::level;
 
 Player Game::player;
@@ -137,6 +135,14 @@ void Game::handleEvents()
 			{
 				keys[RIGHT] = true;
 			}
+			if (e.keyboard.keycode == ALLEGRO_KEY_UP)
+			{
+				keys[UP] = true;
+			}
+			if (e.keyboard.keycode == ALLEGRO_KEY_DOWN)
+			{
+				keys[DOWN] = true;
+			}
 			break;
 		}
 
@@ -150,6 +156,14 @@ void Game::handleEvents()
 			if (e.keyboard.keycode == ALLEGRO_KEY_RIGHT)
 			{
 				keys[RIGHT] = false;
+			}
+			if (e.keyboard.keycode == ALLEGRO_KEY_UP)
+			{
+				keys[UP] = false;
+			}
+			if (e.keyboard.keycode == ALLEGRO_KEY_DOWN)
+			{
+				keys[DOWN] = false;
 			}
 		}
 

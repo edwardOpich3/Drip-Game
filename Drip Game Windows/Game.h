@@ -20,7 +20,7 @@ public:
 	static bool quit;		// Has the program received a quit command?
 	static bool update;		// Is it time to update the screen?
 	static char state;		// What's the current game state?
-	static bool keys[2];	// Array to hold the current keyboard state (to later be moved to its own class)
+	static bool keys[4];	// Array to hold the current keyboard state (to later be moved to its own class)
 	static int level;		// Current level; determines the wall, obstacles, and formations
 
 	// Game related objects

@@ -1,5 +1,4 @@
 #include "Formation.h"
-#include "FormationReader.h"
 #include <fstream>
 
 void Formation::load(int x, int y, Container<ALLEGRO_BITMAP*> obstacleSpr, Container<ALLEGRO_BITMAP*> powerupSpr)
@@ -26,26 +25,26 @@ void Formation::load(int x, int y, Container<ALLEGRO_BITMAP*> obstacleSpr, Conta
 
 			// Powerup?
 			reader.read((char*)temp, 4);
-			objects[i].powerup = FormationReader::readInt32(temp);
+			objects[i].powerup = *reinterpret_cast<int*>(temp);
 
 			// Object Type
 			reader.read((char*)temp, 4);
-			objects[i].type = FormationReader::readInt32(temp);
+			objects[i].type = *reinterpret_cast<int*>(temp);
 
 			// X and Y Coords (center of the object)
 			reader.read((char*)temp, 4);
-			objects[i].x = FormationReader::readInt32(temp) + x;
+			objects[i].x = *reinterpret_cast<int*>(temp) + x;
 
 			reader.read((char*)temp, 4);
-			objects[i].y = FormationReader::readInt32(temp) + y;
+			objects[i].y = *reinterpret_cast<int*>(temp) + y;
 
 			// Scale (1 == 128 width)
 			reader.read((char*)temp, 4);
-			objects[i].size = FormationReader::readSingle(temp);
+			objects[i].size = *reinterpret_cast<float*>(temp);
 
 			// Angle (0 is pointing down)
 			reader.read((char*)temp, 4);
-			objects[i].angle = FormationReader::readSingle(temp);
+			objects[i].angle = *reinterpret_cast<float*>(temp);
 
 			// Sprite (based on type)
 			if (!objects[i].powerup)

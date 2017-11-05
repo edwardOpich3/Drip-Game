@@ -4,7 +4,7 @@
 // Enums
 enum POWERUPS { MULTIPLIER = 3, FAST = 4, SLOW = 8, SIZE = 16, TIME = 32, LIFE = 192 };	// TODO: Is this even used? Get rid of it if not!
 enum ANIMATION_STATE { IDLE, TURNING, HIT };	// Indices of the players animation states. Not yet implemented.
-enum KEYS { LEFT, RIGHT };						// Keycodes of keys pressed (TODO: This probably belongs in a keyboard class or something)
+enum KEYS { LEFT, RIGHT, UP, DOWN };						// Keycodes of keys pressed (TODO: This probably belongs in a keyboard class or something)
 
 const int Player::trailNum;
 
@@ -15,8 +15,8 @@ void Player::init()
 	angle = 0.0f;	// Downwards
 	maxAngle = 45.0f, minAngle = -45.0f;	// Max turn is a 45 degree angle in either direction
 	velocity = 7.0f;
-	minVelocity = 5.0f, maxVelocity = 10.0f;
-	acceleration = 1.0f;
+	minVelocity = 5.0f, midVelocity = 10.0f, maxVelocity = 15.0f;
+	acceleration = 0.1f;
 	size = 1.0f;
 	time = 0.0f;
 	score = 0;
@@ -58,6 +58,56 @@ void Player::update(bool* keys)
 	if (isDead)
 	{
 		velocity = 0.0f;
+	}
+
+	// Otherwise, accelerate the drip!
+	else
+	{
+		// Try to slow down if we're pressing up!
+		if (keys[UP])
+		{
+			velocity -= acceleration;
+		}
+
+		// Try to speed up if we're pressing down!
+		if (keys[DOWN])
+		{
+			velocity += acceleration;
+		}
+
+		// If we're not pressing up or down, we should gravitate to our default speed
+		if (!(keys[UP] || keys[DOWN]))
+		{
+			if (velocity > midVelocity)
+			{
+				velocity -= acceleration;
+				if (velocity < midVelocity)
+				{
+					velocity = midVelocity;
+				}
+			}
+			else if (velocity < midVelocity)
+			{
+				velocity += acceleration;
+				if (velocity > midVelocity)
+				{
+					velocity = midVelocity;
+				}
+			}
+		}
+
+		// We should never travel faster than our max velocity
+		if (velocity > maxVelocity)
+		{
+			velocity = maxVelocity;
+		}
+
+		// If we're going slower than our minimum velocity, that is unacceptable!
+		// TODO: If we have the drip travel backwards at all, this needs fixing!
+		else if (velocity < minVelocity)
+		{
+			velocity = minVelocity;
+		}
 	}
 
 	// Update the paint trail particles
