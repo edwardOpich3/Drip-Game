@@ -311,6 +311,20 @@ void Game::updateFrame()
 							// Lightning bolt, shell, paint bucket
 							if (formations[player.currentFormation].objects[i].type < 3)
 							{
+								// Adjust our variables accordingly
+								if (formations[player.currentFormation].objects[i].type == 0 && !(player.status & 1))
+								{
+									player.maxVelocity += 5.0f;
+								}
+								else if (formations[player.currentFormation].objects[i].type == 1 && !(player.status & 2))
+								{
+									player.minVelocity /= 2.0f;
+								}
+								else if(formations[player.currentFormation].objects[i].type == 2)
+								{
+									player.size += 0.1f;
+								}
+
 								player.status = player.status | (int)std::pow(2, formations[player.currentFormation].objects[i].type);
 							}
 

@@ -15,7 +15,7 @@ void Player::init()
 	angle = 0.0f;	// Downwards
 	maxAngle = 45.0f, minAngle = -45.0f;	// Max turn is a 45 degree angle in either direction
 	velocity = 7.0f;
-	minVelocity = 5.0f, midVelocity = 10.0f, maxVelocity = 15.0f;
+	minVelocity = 6.0f, midVelocity = 9.0f, maxVelocity = 12.0f;
 	acceleration = 0.1f;
 	size = 1.0f;
 	time = 0.0f;
