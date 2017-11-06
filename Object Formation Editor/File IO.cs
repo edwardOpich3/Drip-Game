@@ -27,7 +27,7 @@ namespace Object_Formation_Editor
 				{
 					// If the data is completely outside of the level, it's useless and unreachable; don't bother saving it.
 					// If the type doesn't exist, then it's corrupt; get rid of it (TODO: That functionality doesn't quite work yet because there are two lists of objects; obstacles and powerups. Fix it!)
-					if (objects[i].bounds.X / 2 < (2048.0f * formationScale) && (objects[i].bounds.X + objects[i].bounds.Width) / 2 > 0 && (objects[i].bounds.Y + objects[i].bounds.Height) / 2 > 0 && objects[i].bounds.Y / 2 < (2048.0f * formationScale) && objects[i].type >= 0 && objects[i].powerup > -1 && objects[i].powerup <= 1)
+					if (objects[i].bounds.Left < (2048.0f * formationScale) && objects[i].bounds.Right > 0 && objects[i].bounds.Bottom > 0 && objects[i].bounds.Top < (2048.0f * formationScale) && objects[i].type >= 0 && objects[i].powerup > -1 && objects[i].powerup <= 1)
 					{
 						writer.Write(objects[i].powerup);
 						writer.Write(objects[i].type);
@@ -70,7 +70,7 @@ namespace Object_Formation_Editor
 						{
 							// If the data is completely outside of the level, it's useless and unreachable; don't bother saving it.
 							// If the type doesn't exist, then it's corrupt; get rid of it
-							if (objects[i].bounds.X / 2 < (2048.0f * formationScale) && (objects[i].bounds.X + objects[i].bounds.Width) / 2 > 0 && (objects[i].bounds.Y + objects[i].bounds.Height) / 2 > 0 && objects[i].bounds.Y / 2 < (2048.0f * formationScale) && objects[i].type >= 0 && objects[i].powerup > -1 && objects[i].powerup <= 1)
+							if (objects[i].bounds.Left < (2048.0f * formationScale) && objects[i].bounds.Right > 0 && objects[i].bounds.Bottom > 0 && objects[i].bounds.Top < (2048.0f * formationScale) && objects[i].type >= 0 && objects[i].powerup > -1 && objects[i].powerup <= 1)
 							{
 								writer.Write(objects[i].powerup);
 								writer.Write(objects[i].type);
@@ -179,7 +179,7 @@ namespace Object_Formation_Editor
 						{
 							// If the data is completely outside of the level, it's useless and unreachable; don't bother saving it.
 							// If the type doesn't exist, then it's corrupt; get rid of it
-							if (objects[i].bounds.X / 2 < (2048.0f * formationScale) && (objects[i].bounds.X + objects[i].bounds.Width) / 2 > 0 && (objects[i].bounds.Y + objects[i].bounds.Height) / 2 > 0 && objects[i].bounds.Y / 2 < (2048.0f * formationScale) && objects[i].type >= 0 && objects[i].powerup > -1 && objects[i].powerup <= 1)
+							if (objects[i].bounds.Left < (2048.0f * formationScale) && objects[i].bounds.Right > 0 && objects[i].bounds.Bottom > 0 && objects[i].bounds.Top < (2048.0f * formationScale) && objects[i].type >= 0 && objects[i].powerup > -1 && objects[i].powerup <= 1)
 							{
 								writer.Write(objects[i].powerup);
 								writer.Write(objects[i].type);
@@ -241,7 +241,7 @@ namespace Object_Formation_Editor
 						{
 							// If the data is completely outside of the level, it's useless and unreachable; don't bother saving it.
 							// If the type doesn't exist, then it's corrupt; get rid of it
-							if (objects[i].bounds.X / 2 < (2048.0f * formationScale) && (objects[i].bounds.X + objects[i].bounds.Width) / 2 > 0 && (objects[i].bounds.Y + objects[i].bounds.Height) / 2 > 0 && objects[i].bounds.Y / 2 < (2048.0f * formationScale) && objects[i].type >= 0 && objects[i].powerup > -1 && objects[i].powerup <= 1)
+							if (objects[i].bounds.Left < (2048.0f * formationScale) && objects[i].bounds.Right > 0 && objects[i].bounds.Bottom > 0 && objects[i].bounds.Top < (2048.0f * formationScale) && objects[i].type >= 0 && objects[i].powerup > -1 && objects[i].powerup <= 1)
 							{
 								writer.Write(objects[i].powerup);
 								writer.Write(objects[i].type);
