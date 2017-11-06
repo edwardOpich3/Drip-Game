@@ -211,6 +211,12 @@ namespace Object_Formation_Editor
 
 		private void background_MouseDown(object sender, EventArgs e)
 		{
+			Point temp = new Point(panel1.HorizontalScroll.Value, panel1.VerticalScroll.Value);
+			background.Focus();
+			panel1.VerticalScroll.Value = temp.Y;
+			panel1.HorizontalScroll.Value = temp.X;
+			panel1.PerformLayout();
+
 			leftMouseDown = true;
 
 			// Compare mouse's position to all of the objects in your list, starting from the end.
