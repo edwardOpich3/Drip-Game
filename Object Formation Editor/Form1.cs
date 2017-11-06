@@ -211,7 +211,6 @@ namespace Object_Formation_Editor
 
 		private void background_MouseDown(object sender, EventArgs e)
 		{
-			background.Focus();
 			leftMouseDown = true;
 
 			// Compare mouse's position to all of the objects in your list, starting from the end.
