@@ -22,7 +22,7 @@ void GameObject::update()
 
 void GameObject::draw(Camera camera)
 {
-	al_draw_scaled_rotated_bitmap(sprite, (al_get_bitmap_width(sprite) / 2.0f), (al_get_bitmap_height(sprite) / 2.0f), x - camera.x, y - camera.y, (size * width) / al_get_bitmap_width(sprite), (size * height) / al_get_bitmap_height(sprite), -angle * (ALLEGRO_PI / 180.0f), NULL);
+	al_draw_scaled_rotated_bitmap(sprite, (al_get_bitmap_width(sprite) / 2.0f), (al_get_bitmap_height(sprite) / 2.0f), x - camera.x, y - camera.y, width / al_get_bitmap_width(sprite), height / al_get_bitmap_height(sprite), -angle * (ALLEGRO_PI / 180.0f), NULL);
 }
 
 // TODO: This function could use some working; ideally, rather than a point, it would check against another collision structure

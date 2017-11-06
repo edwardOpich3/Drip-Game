@@ -4,7 +4,7 @@
 void Formation::load(int x, int y, Container<ALLEGRO_BITMAP*> obstacleSpr, Container<ALLEGRO_BITMAP*> powerupSpr)
 {
 	// Hard-coded formation, later replace this with a random selection algorithm
-	std::ifstream reader("data/obstacle formations/smile.fmt", std::ios::in | std::ios::binary);
+	std::ifstream reader("data/obstacle formations/1.fmt", std::ios::in | std::ios::binary);
 
 	// This function won't work if the path passed to the reader is invalid!
 	if (reader.is_open())
