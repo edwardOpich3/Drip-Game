@@ -227,16 +227,16 @@ void Game::updateFrame()
 				// Are the formations left, right, and center of the player loaded?
 				if ((int)(formations[i].y / 2048.0f) == (int)(player.y / 2048.0f) && player.y >= 2048.0f)
 				{
-					if ((int)(formations[i].x / 2048.0f) == (int)(player.x / 2048.0f) - 1)
+					if ((int)std::floorf(formations[i].x / 2048.0f) == (int)std::floorf(player.x / 2048.0f) - 1)
 					{
 						loadedFormations[0] = true;
 					}
-					else if ((int)(formations[i].x / 2048.0f) == (int)(player.x / 2048.0f))
+					else if ((int)std::floorf(formations[i].x / 2048.0f) == (int)std::floorf(player.x / 2048.0f))
 					{
 						loadedFormations[1] = true;
 						player.currentFormation = i;
 					}
-					else if ((int)(formations[i].x / 2048.0f) == (int)(player.x / 2048.0f) + 1)
+					else if ((int)std::floorf(formations[i].x / 2048.0f) == (int)std::floorf(player.x / 2048.0f) + 1)
 					{
 						loadedFormations[2] = true;
 					}
@@ -245,15 +245,15 @@ void Game::updateFrame()
 				// Are the formations down-left, down, and down-right of the player loaded?
 				else if ((int)(formations[i].y / 2048.0f) == (int)(player.y / 2048.0f) + 1)
 				{
-					if ((int)(formations[i].x / 2048.0f) == (int)(player.x / 2048.0f) - 1)
+					if ((int)std::floorf(formations[i].x / 2048.0f) == (int)std::floorf(player.x / 2048.0f) - 1)
 					{
 						loadedFormations[3] = true;
 					}
-					else if ((int)(formations[i].x / 2048.0f) == (int)(player.x / 2048.0f))
+					else if ((int)std::floorf(formations[i].x / 2048.0f) == (int)std::floorf(player.x / 2048.0f))
 					{
 						loadedFormations[4] = true;
 					}
-					else if ((int)(formations[i].x / 2048.0f) == (int)(player.x / 2048.0f) + 1)
+					else if ((int)std::floorf(formations[i].x / 2048.0f) == (int)std::floorf(player.x / 2048.0f) + 1)
 					{
 						loadedFormations[5] = true;
 					}
@@ -272,7 +272,7 @@ void Game::updateFrame()
 				if (!loadedFormations[i])
 				{
 					formations.push(Formation());
-					formations[formations.count - 1].load((((int)player.x / 2048) + ((i % 3) - 1)) * 2048, (((int)player.y / 2048) + (i / 3)) * 2048, obstacleSpr, powerups);
+					formations[formations.count - 1].load((((int)std::floorf(player.x / 2048.0f)) + ((i % 3) - 1)) * 2048, (((int)player.y / 2048) + (i / 3)) * 2048, obstacleSpr, powerups);
 				}
 			}
 
