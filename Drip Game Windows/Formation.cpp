@@ -1,10 +1,26 @@
 #include "Formation.h"
 #include <fstream>
+#include <sstream>
+
+int Formation::numFiles = 0;
 
 void Formation::load(int x, int y, Container<ALLEGRO_BITMAP*> obstacleSpr, Container<ALLEGRO_BITMAP*> powerupSpr)
 {
-	// Hard-coded formation, later replace this with a random selection algorithm
-	std::ifstream reader("data/obstacle formations/1.fmt", std::ios::in | std::ios::binary);
+	// If we haven't gotten the number of files yet, we need to do that!
+	if (numFiles < 1)
+	{
+		getNumFiles();
+	}
+
+	// Using the number of files as our upper limit, randomly select one of them to load!
+	// TODO: Instead of loading the files in at runtime, try loading them all into a container at load time, and then copying from there at runtime
+	std::stringstream convert;
+	std::string path = "data/obstacle formations/";
+	convert << (((unsigned int)rand() % numFiles) + 1);
+	path += convert.str();
+	path += ".fmt";
+
+	std::ifstream reader(path, std::ios::in | std::ios::binary);
 
 	// This function won't work if the path passed to the reader is invalid!
 	if (reader.is_open())
@@ -87,6 +103,36 @@ void Formation::draw(Camera camera)
 void Formation::unload()
 {
 	objects.clear();
+}
+
+void Formation::getNumFiles()
+{
+	std::stringstream convert;
+	std::string path = "data/obstacle formations/";
+	convert << (numFiles + 1);
+	path += convert.str();
+	path += ".fmt";
+	std::fstream check(path);
+
+	while (check.good())
+	{
+		numFiles++;
+		check.close();
+		convert.str(std::string());
+		convert.clear();
+
+		path = "data/obstacle formations/";
+		convert << (numFiles + 1);
+		path += convert.str();
+		path += ".fmt";
+
+		check.open(path);
+	}
+}
+
+void Formation::eraseNumFiles()
+{
+	numFiles = 0;
 }
 
 Formation Formation::operator=(const Formation& other)

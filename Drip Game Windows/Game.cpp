@@ -5,6 +5,8 @@
 #include <string>
 #include <sstream>
 #include <fstream>
+#include <random>
+#include <ctime>
 
 // Enums (TODO: Move certain enums to appropriate classes, if possible)
 enum GAME_STATE { SPLASH, TITLE, GAME };	// Current game state
@@ -97,6 +99,9 @@ bool Game::initialize()
 
 	// Initialize for the first state
 	load();
+
+	// Seed the RNG!
+	srand(time(0));
 
 	// Begin the timer; should be last step before game loop
 	al_start_timer(timer);
@@ -607,6 +612,8 @@ void Game::unload()
 			{
 				formations[i].unload();
 			}
+
+			Formation::eraseNumFiles();
 
 			break;
 		}
