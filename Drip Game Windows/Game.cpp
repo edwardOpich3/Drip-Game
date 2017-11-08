@@ -10,6 +10,7 @@
 
 // Enums (TODO: Move certain enums to appropriate classes, if possible)
 enum GAME_STATE { SPLASH, TITLE, GAME };	// Current game state
+enum GAME_PHASE { PRE_GAME, MID_GAME, POST_GAME };	// Current phase of gameplay
 enum KEYS { LEFT, RIGHT, UP, DOWN };					// Keycodes for the keyboard
 
 ALLEGRO_DISPLAY* Game::display;
@@ -20,6 +21,7 @@ ALLEGRO_BITMAP* Game::buffer;
 bool Game::quit;
 bool Game::update;
 char Game::state;
+char Game::phase;
 bool Game::keys[] = { false, false, false, false };
 int Game::level;
 
@@ -95,6 +97,7 @@ bool Game::initialize()
 	quit = false;
 	update = false;
 	state = GAME;
+	phase = PRE_GAME;
 	level = 1;
 
 	// Initialize for the first state
@@ -211,6 +214,23 @@ void Game::updateFrame()
 
 		case GAME:
 		{
+			// Update phase
+			if (player.y > 0)
+			{
+				if (!player.isDead)
+				{
+					phase = MID_GAME;
+				}
+				else
+				{
+					phase = POST_GAME;
+				}
+			}
+			else
+			{
+				phase = PRE_GAME;
+			}
+
 			// Check if formations around the player have been loaded
 			bool loadedFormations[6] = { false, false, false, false, false, false };
 			for (int i = 0; i < formations.count; i++)
@@ -420,40 +440,59 @@ void Game::updateFrame()
 			// Draw the player
 			player.draw(camera);
 
-			// Draw the HUD
-			al_draw_text(hudFont[0], al_map_rgb(255, 255, 255), 128, 1, ALLEGRO_ALIGN_CENTRE, "SCORE");
-			al_draw_text(hudFont[0], al_map_rgb(255, 255, 255), 900, 1, ALLEGRO_ALIGN_CENTRE, "SIZE");
 
-			al_draw_textf(hudFont[1], al_map_rgb(255, 255, 255), 128, 32, ALLEGRO_ALIGN_CENTRE, "%08d", player.score);
-			al_draw_textf(hudFont[1], al_map_rgb(255, 255, 255), 900, 32, ALLEGRO_ALIGN_CENTRE, "%1.6f", player.size);
-
-			// Figure out which images to draw to the HUD based on the player's current status
-			for (int i = 0; i < 8; i++)
+			switch (phase)
 			{
-				if (i < 3)
+				case PRE_GAME:
 				{
-					if (player.status & (int)std::pow(2, i))
-					{
-						al_draw_bitmap(powerups[i], 37 + (i * 32), 80, NULL);
-					}
+					// TODO: Add functionality here!
+					break;
 				}
-				else if (i < 6)
+				case MID_GAME:
 				{
-					int multiplier = (player.status >> 0x3) & 0x7;
-					if (multiplier)
+					// Draw the HUD
+					al_draw_text(hudFont[0], al_map_rgb(255, 255, 255), 128, 1, ALLEGRO_ALIGN_CENTRE, "SCORE");
+					al_draw_text(hudFont[0], al_map_rgb(255, 255, 255), 900, 1, ALLEGRO_ALIGN_CENTRE, "SIZE");
+
+					al_draw_textf(hudFont[1], al_map_rgb(255, 255, 255), 128, 32, ALLEGRO_ALIGN_CENTRE, "%08d", player.score);
+					al_draw_textf(hudFont[1], al_map_rgb(255, 255, 255), 900, 32, ALLEGRO_ALIGN_CENTRE, "%1.6f", player.size);
+
+					// Figure out which images to draw to the HUD based on the player's current status
+					for (int i = 0; i < 8; i++)
 					{
-						al_draw_textf(hudFont[2], al_map_rgb(255, 255, 255), 37 + (i * 32), 80, NULL, "%dX", multiplier + 1);
+						if (i < 3)
+						{
+							if (player.status & (int)std::pow(2, i))
+							{
+								al_draw_bitmap(powerups[i], 37 + (i * 32), 80, NULL);
+							}
+						}
+						else if (i < 6)
+						{
+							int multiplier = (player.status >> 0x3) & 0x7;
+							if (multiplier)
+							{
+								al_draw_textf(hudFont[2], al_map_rgb(255, 255, 255), 37 + (i * 32), 80, NULL, "%dX", multiplier + 1);
+							}
+							i = 6;
+						}
+						else
+						{
+							int lives = (player.status >> 0x6) & 0x3;
+							if (lives)
+							{
+								al_draw_bitmap(powerups[i - 3], 37 + ((i - 3) * 32), 80, NULL);
+								al_draw_textf(hudFont[2], al_map_rgb(255, 255, 255), 64 + ((i - 3) * 32), 80, NULL, "x%d", lives);
+							}
+							break;
+						}
 					}
-					i = 6;
+
+					break;
 				}
-				else
+				case POST_GAME:
 				{
-					int lives = (player.status >> 0x6) & 0x3;
-					if (lives)
-					{
-						al_draw_bitmap(powerups[i - 3], 37 + ((i - 3) * 32), 80, NULL);
-						al_draw_textf(hudFont[2], al_map_rgb(255, 255, 255), 64 + ((i - 3) * 32), 80, NULL, "x%d", lives);
-					}
+					// TODO: Add functionality here!
 					break;
 				}
 			}
