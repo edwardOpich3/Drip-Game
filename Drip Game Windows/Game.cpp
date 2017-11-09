@@ -1,5 +1,6 @@
 #include "Game.h"
 #include "Container.h"
+#include "Input.h"
 #include "allegro5/allegro_image.h"
 #include "allegro5/allegro_ttf.h"
 #include <string>
@@ -11,7 +12,6 @@
 // Enums (TODO: Move certain enums to appropriate classes, if possible)
 enum GAME_STATE { SPLASH, TITLE, GAME };	// Current game state
 enum GAME_PHASE { PRE_GAME, MID_GAME, POST_GAME };	// Current phase of gameplay
-enum KEYS { LEFT, RIGHT, UP, DOWN };					// Keycodes for the keyboard
 
 ALLEGRO_DISPLAY* Game::display;
 ALLEGRO_EVENT_QUEUE* Game::event;
@@ -22,7 +22,6 @@ bool Game::quit;
 bool Game::update;
 char Game::state;
 char Game::phase;
-bool Game::keys[] = { false, false, false, false };
 int Game::level;
 
 Player Game::player;
@@ -135,21 +134,9 @@ void Game::handleEvents()
 			{
 				quit = true;
 			}
-			if (e.keyboard.keycode == ALLEGRO_KEY_LEFT)
+			else
 			{
-				keys[LEFT] = true;
-			}
-			if (e.keyboard.keycode == ALLEGRO_KEY_RIGHT)
-			{
-				keys[RIGHT] = true;
-			}
-			if (e.keyboard.keycode == ALLEGRO_KEY_UP)
-			{
-				keys[UP] = true;
-			}
-			if (e.keyboard.keycode == ALLEGRO_KEY_DOWN)
-			{
-				keys[DOWN] = true;
+				Input::handleEvents(e);
 			}
 			break;
 		}
@@ -157,22 +144,7 @@ void Game::handleEvents()
 		// Check keys released this frame
 		case ALLEGRO_EVENT_KEY_UP:
 		{
-			if (e.keyboard.keycode == ALLEGRO_KEY_LEFT)
-			{
-				keys[LEFT] = false;
-			}
-			if (e.keyboard.keycode == ALLEGRO_KEY_RIGHT)
-			{
-				keys[RIGHT] = false;
-			}
-			if (e.keyboard.keycode == ALLEGRO_KEY_UP)
-			{
-				keys[UP] = false;
-			}
-			if (e.keyboard.keycode == ALLEGRO_KEY_DOWN)
-			{
-				keys[DOWN] = false;
-			}
+			Input::handleEvents(e);
 		}
 
 		// Check if the timer has run out
@@ -406,7 +378,7 @@ void Game::updateFrame()
 			}
 
 			// Update the player based on the keyboard state, move the camera to the player's position
-			player.update(keys);
+			player.update();
 			camera.update(player.x - 512, player.y - 64);
 
 			/* DRAW CALLS BEGIN HERE */

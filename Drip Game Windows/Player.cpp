@@ -1,10 +1,10 @@
 #include "Player.h"
+#include "Input.h"
 #include <math.h>
 
 // Enums
 enum POWERUPS { MULTIPLIER = 3, FAST = 4, SLOW = 8, SIZE = 16, TIME = 32, LIFE = 192 };	// TODO: Is this even used? Get rid of it if not!
 enum ANIMATION_STATE { IDLE, TURNING, HIT };	// Indices of the players animation states. Not yet implemented.
-enum KEYS { LEFT, RIGHT, UP, DOWN };						// Keycodes of keys pressed (TODO: This probably belongs in a keyboard class or something)
 
 const int Player::trailNum;
 
@@ -52,7 +52,7 @@ void Player::draw(Camera camera)
 	al_draw_scaled_rotated_bitmap(sprite, (al_get_bitmap_width(sprite) / 2.0f), (al_get_bitmap_height(sprite) / 2.0f), x - camera.x, y - camera.y, (size * width) / al_get_bitmap_width(sprite), (size * height) / al_get_bitmap_height(sprite), -angle * (ALLEGRO_PI / 180.0f), NULL);
 }
 
-void Player::update(bool* keys)
+void Player::update()
 {
 	// If the player is dead, make sure they don't move! The game is over!
 	if (isDead)
@@ -64,19 +64,19 @@ void Player::update(bool* keys)
 	else
 	{
 		// Try to slow down if we're pressing up!
-		if (keys[UP])
+		if (Input::keys[Input::LEFT])
 		{
 			velocity -= acceleration;
 		}
 
 		// Try to speed up if we're pressing down!
-		if (keys[DOWN])
+		if (Input::keys[Input::DOWN])
 		{
 			velocity += acceleration;
 		}
 
 		// If we're not pressing up or down, we should gravitate to our default speed
-		if (!(keys[UP] || keys[DOWN]))
+		if (!(Input::keys[Input::UP] || Input::keys[Input::DOWN]))
 		{
 			if (velocity > midVelocity)
 			{
@@ -139,7 +139,7 @@ void Player::update(bool* keys)
 	}*/
 
 	// Check keys!
-	if (keys[LEFT])
+	if (Input::keys[Input::LEFT])
 	{
 		angle -= 5.0f;
 		if (angle < minAngle)
@@ -147,7 +147,7 @@ void Player::update(bool* keys)
 			angle = minAngle;
 		}
 	}
-	if (keys[RIGHT])
+	if (Input::keys[Input::RIGHT])
 	{
 		angle += 5.0f;
 		if (angle > maxAngle)
