@@ -34,6 +34,7 @@ public:
 	// Various bitmaps
 	static ALLEGRO_BITMAP* background;	// The background graphic to draw
 	static ALLEGRO_BITMAP* bgBuffer;	// The buffer to draw to the screen in lieu of the background graphic
+	static ALLEGRO_BITMAP* uiBitmap;	// The current ui graphic. TODO: Fix this later, it's super hacky!
 	static Container<ALLEGRO_BITMAP*> powerups;	// The powerup bitmaps
 
 	// Fonts

@@ -10,7 +10,7 @@ const int Player::trailNum;
 
 void Player::init()
 {
-	x = 1024.0f, y = -512.0f;
+	x = 1024.0f, y = -1024.0f;
 	width = 32.0f, height = 64.0f;
 	angle = 0.0f;	// Downwards
 	maxAngle = 45.0f, minAngle = -45.0f;	// Max turn is a 45 degree angle in either direction
@@ -58,21 +58,25 @@ void Player::update()
 	if (isDead)
 	{
 		velocity = 0.0f;
+		return;
 	}
 
 	// Otherwise, accelerate the drip!
 	else
 	{
-		// Try to slow down if we're pressing up!
-		if (Input::keys[Input::LEFT])
+		if (y > 0)
 		{
-			velocity -= acceleration;
-		}
+			// Try to slow down if we're pressing up!
+			if (Input::keys[Input::UP])
+			{
+				velocity -= acceleration;
+			}
 
-		// Try to speed up if we're pressing down!
-		if (Input::keys[Input::DOWN])
-		{
-			velocity += acceleration;
+			// Try to speed up if we're pressing down!
+			if (Input::keys[Input::DOWN])
+			{
+				velocity += acceleration;
+			}
 		}
 
 		// If we're not pressing up or down, we should gravitate to our default speed
@@ -139,20 +143,23 @@ void Player::update()
 	}*/
 
 	// Check keys!
-	if (Input::keys[Input::LEFT])
+	if (y > 0)
 	{
-		angle -= 5.0f;
-		if (angle < minAngle)
+		if (Input::keys[Input::LEFT])
 		{
-			angle = minAngle;
+			angle -= 5.0f;
+			if (angle < minAngle)
+			{
+				angle = minAngle;
+			}
 		}
-	}
-	if (Input::keys[Input::RIGHT])
-	{
-		angle += 5.0f;
-		if (angle > maxAngle)
+		if (Input::keys[Input::RIGHT])
 		{
-			angle = maxAngle;
+			angle += 5.0f;
+			if (angle > maxAngle)
+			{
+				angle = maxAngle;
+			}
 		}
 	}
 

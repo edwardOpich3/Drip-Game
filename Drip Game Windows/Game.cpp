@@ -32,6 +32,7 @@ Container<Formation> Game::formations;
 
 ALLEGRO_BITMAP* Game::background;
 ALLEGRO_BITMAP* Game::bgBuffer;
+ALLEGRO_BITMAP* Game::uiBitmap;
 Container<ALLEGRO_BITMAP*> Game::powerups;
 
 Container<ALLEGRO_FONT*> Game::hudFont;
@@ -195,6 +196,7 @@ void Game::updateFrame()
 				}
 				else
 				{
+					// TODO: If phase wasn't already POST_GAME, create a cursor object, and display the Game Over text!
 					phase = POST_GAME;
 				}
 			}
@@ -417,11 +419,18 @@ void Game::updateFrame()
 			{
 				case PRE_GAME:
 				{
-					// TODO: Add functionality here!
+					// TODO: Draw the "Get Ready!" text.
+					al_draw_text(hudFont[6], al_map_rgb(255.0f, 255.0f, 255.0f), 512, 32, ALLEGRO_ALIGN_CENTER, "GET READY!");
 					break;
 				}
 				case MID_GAME:
 				{
+					// TODO: If the timer for it hasn't run out, draw the "SLIDE!" text.
+					if (player.y < 1024)
+					{
+						al_draw_text(hudFont[6], al_map_rgb(255.0f, 255.0f, 255.0f), 512, 288, ALLEGRO_ALIGN_CENTER, "SLIDE!");
+					}
+
 					// Draw the HUD
 					al_draw_text(hudFont[0], al_map_rgb(255, 255, 255), 128, 1, ALLEGRO_ALIGN_CENTRE, "SCORE");
 					al_draw_text(hudFont[0], al_map_rgb(255, 255, 255), 900, 1, ALLEGRO_ALIGN_CENTRE, "SIZE");
@@ -464,7 +473,20 @@ void Game::updateFrame()
 				}
 				case POST_GAME:
 				{
-					// TODO: Add functionality here!
+					// TODO: Draw the cursor object and the Game Over text and menu!
+					al_draw_text(hudFont[5], al_map_rgb(255.0f, 255.0f, 255.0f), 512, 0, ALLEGRO_ALIGN_CENTER, "YOU CRASHED!");
+
+					al_draw_rotated_bitmap(uiBitmap, al_get_bitmap_width(uiBitmap) / 2, al_get_bitmap_height(uiBitmap) / 2, 512, 448, 0.0f, NULL);
+
+					al_draw_text(hudFont[4], al_map_rgb(255.0f, 255.0f, 255.0f), 512, 192, ALLEGRO_ALIGN_CENTER, "Final Score:");
+					al_draw_textf(hudFont[4], al_map_rgb(255.0f, 255.0f, 255.0f), 512, 256, ALLEGRO_ALIGN_CENTER, "%08d", player.score);
+
+					al_draw_text(hudFont[4], al_map_rgb(255.0f, 255.0f, 255.0f), 512, 352, ALLEGRO_ALIGN_CENTER, "Final Size:");
+					al_draw_textf(hudFont[4], al_map_rgb(255.0f, 255.0f, 255.0f), 512, 416, ALLEGRO_ALIGN_CENTER, "%1.6f", player.size);
+
+					// Uncomment these once the cursor has been implemented!
+					/*al_draw_text(hudFont[3], al_map_rgb(255.0f, 255.0f, 255.0f), 512, 576, ALLEGRO_ALIGN_CENTER, "Play Again");
+					al_draw_text(hudFont[3], al_map_rgb(255.0f, 255.0f, 255.0f), 512, 640, ALLEGRO_ALIGN_CENTER, "Quit Game");*/
 					break;
 				}
 			}
@@ -502,6 +524,10 @@ void Game::load()
 			hudFont.push(al_load_ttf_font("data/fonts/hud.ttf", 26, NULL));
 			hudFont.push(al_load_ttf_font("data/fonts/hud.ttf", 34, NULL));
 			hudFont.push(al_load_ttf_font("data/fonts/hudBold.ttf", 22, NULL));
+			hudFont.push(al_load_ttf_font("data/fonts/hud.ttf", 48, NULL));
+			hudFont.push(al_load_ttf_font("data/fonts/hud.ttf", 64, NULL));
+			hudFont.push(al_load_ttf_font("data/fonts/hud.ttf", 96, NULL));
+			hudFont.push(al_load_ttf_font("data/fonts/hud.ttf", 128, NULL));
 
 			// Create the formations container, and place the first 3 formations at the row below the player
 			for (int i = 0; i < 3; i++)
@@ -522,6 +548,8 @@ void Game::loadGraphics()
 	loadBG();
 	loadPowerupData();
 	loadObstacleData();
+
+	uiBitmap = al_load_bitmap("data/sprites/ui/menu.png");
 }
 
 void Game::loadBG()
@@ -579,6 +607,8 @@ void Game::unloadGraphics()
 {
 	unloadPowerupData();
 	unloadObstacleData();
+
+	al_destroy_bitmap(uiBitmap);
 }
 
 void Game::unloadPowerupData()
@@ -615,9 +645,11 @@ void Game::unload()
 			unloadGraphics();
 			player.unload();
 			bgShader.unload();
-			al_destroy_font(hudFont[0]);
-			al_destroy_font(hudFont[1]);
-			al_destroy_font(hudFont[2]);
+
+			for (unsigned int i = 0; i < hudFont.count; i++)
+			{
+				al_destroy_font(hudFont[i]);
+			}
 
 			for (int i = 0; i < formations.count; i++)
 			{
