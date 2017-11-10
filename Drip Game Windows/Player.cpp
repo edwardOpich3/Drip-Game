@@ -21,14 +21,22 @@ void Player::init()
 	time = 0.0f;
 	score = 0;
 	status = 0;
+	isDead = false;
+	isInvincible = false;
 
 	currentFormation = -1;
 
-	sprite = al_load_bitmap("data/sprites/player.png");
+	if (!sprite)
+	{
+		sprite = al_load_bitmap("data/sprites/player.png");
+	}
 	frame = 0;
 	animationState = IDLE;
 
-	trail = al_load_bitmap("data/sprites/trail.png");
+	if (!trail)
+	{
+		trail = al_load_bitmap("data/sprites/trail.png");
+	}
 	for (int i = 0; i < trailNum; i++)
 	{
 		trailX[i] = 0;

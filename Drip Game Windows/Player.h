@@ -22,11 +22,11 @@ public:
 
 	int currentFormation;	// The index of the formation the player is currently in.
 
-	ALLEGRO_BITMAP* sprite;	// The player's spritesheet
+	ALLEGRO_BITMAP* sprite = nullptr;	// The player's spritesheet
 	char frame;	// The current frame of animation.
 	char animationState;	// The current animation state; moving, turning, dying, etc.
 
-	ALLEGRO_BITMAP* trail;	// The player's trail, pasted multiple times
+	ALLEGRO_BITMAP* trail = nullptr;	// The player's trail, pasted multiple times
 	static const int trailNum = 30;	// The number of trail sprites to put behind the player
 
 	// The previous x and y positions to paste the trail at, as well as the angle and size

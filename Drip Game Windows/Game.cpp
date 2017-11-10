@@ -494,8 +494,29 @@ void Game::updateFrame()
 
 					int temp = cursor.update();
 
+					// Play Again
+					if (temp == 0)
+					{
+						// TODO: Insert reinitialization code here! Or make a function for it!
+						player.init();
+						camera.init();
+						
+						formations.clear();
+
+						// Create the formations container, and place the first 3 formations at the row below the player
+						for (int i = 0; i < 3; i++)
+						{
+							formations.push(Formation());
+						}
+						formations[0].load(-2048, 2048, obstacleSpr, powerups);
+						formations[1].load(0, 2048, obstacleSpr, powerups);
+						formations[2].load(2048, 2048, obstacleSpr, powerups);
+
+						phase = PRE_GAME;
+					}
+
 					// Quit Game
-					if (temp == 1)
+					else if (temp == 1)
 					{
 						quit = true;
 					}
