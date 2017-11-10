@@ -5,6 +5,7 @@
 #include "Camera.h"
 #include "Shader.h"
 #include "Formation.h"
+#include "Cursor.h"
 class Game
 {
 public:
@@ -27,6 +28,7 @@ public:
 	static Player player;
 	static Camera camera;
 	static Shader bgShader;	// Infinite scrolling BG shader
+	static Cursor cursor;
 
 	// Formations
 	static Container<Formation> formations;	// Container of object formations

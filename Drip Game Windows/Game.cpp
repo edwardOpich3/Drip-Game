@@ -27,6 +27,7 @@ int Game::level;
 Player Game::player;
 Camera Game::camera;
 Shader Game::bgShader;
+Cursor Game::cursor;
 
 Container<Formation> Game::formations;
 
@@ -197,7 +198,11 @@ void Game::updateFrame()
 				else
 				{
 					// TODO: If phase wasn't already POST_GAME, create a cursor object, and display the Game Over text!
-					phase = POST_GAME;
+					if (phase != POST_GAME)
+					{
+						phase = POST_GAME;
+						cursor = Cursor(powerups[4], 352, 592, 64, true, 1);
+					}
 				}
 			}
 			else
@@ -484,9 +489,18 @@ void Game::updateFrame()
 					al_draw_text(hudFont[4], al_map_rgb(255.0f, 255.0f, 255.0f), 512, 352, ALLEGRO_ALIGN_CENTER, "Final Size:");
 					al_draw_textf(hudFont[4], al_map_rgb(255.0f, 255.0f, 255.0f), 512, 416, ALLEGRO_ALIGN_CENTER, "%1.6f", player.size);
 
-					// Uncomment these once the cursor has been implemented!
-					/*al_draw_text(hudFont[3], al_map_rgb(255.0f, 255.0f, 255.0f), 512, 576, ALLEGRO_ALIGN_CENTER, "Play Again");
-					al_draw_text(hudFont[3], al_map_rgb(255.0f, 255.0f, 255.0f), 512, 640, ALLEGRO_ALIGN_CENTER, "Quit Game");*/
+					al_draw_text(hudFont[3], al_map_rgb(255.0f, 255.0f, 255.0f), 512, 576, ALLEGRO_ALIGN_CENTER, "Play Again");
+					al_draw_text(hudFont[3], al_map_rgb(255.0f, 255.0f, 255.0f), 512, 640, ALLEGRO_ALIGN_CENTER, "Quit Game");
+
+					int temp = cursor.update();
+
+					// Quit Game
+					if (temp == 1)
+					{
+						quit = true;
+					}
+
+					cursor.draw();
 					break;
 				}
 			}

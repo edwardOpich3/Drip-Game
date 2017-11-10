@@ -22,6 +22,10 @@ void Input::handleEvents(ALLEGRO_EVENT e)
 		{
 			keys[DOWN] = true;
 		}
+		if (e.keyboard.keycode == ALLEGRO_KEY_ENTER)
+		{
+			keys[ENTER] = true;
+		}
 	}
 
 	else if (e.type == ALLEGRO_EVENT_KEY_UP)
@@ -41,6 +45,10 @@ void Input::handleEvents(ALLEGRO_EVENT e)
 		if (e.keyboard.keycode == ALLEGRO_KEY_DOWN)
 		{
 			keys[DOWN] = false;
+		}
+		if (e.keyboard.keycode == ALLEGRO_KEY_ENTER)
+		{
+			keys[ENTER] = false;
 		}
 	}
 }

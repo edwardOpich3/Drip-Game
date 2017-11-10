@@ -73,6 +73,8 @@
     <Allegro_AddonImage>true</Allegro_AddonImage>
     <OutDir>$(SoultionDir)$(ProjectDir)bin\$(Configuration)\</OutDir>
     <IntDir>obj\$(Configuration)\</IntDir>
+    <Allegro_AddonTTF>true</Allegro_AddonTTF>
+    <Allegro_AddonFont>true</Allegro_AddonFont>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Allegro_AddonImage>true</Allegro_AddonImage>
@@ -126,6 +128,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Cursor.cpp" />
     <ClCompile Include="Formation.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
@@ -137,6 +140,7 @@
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Container.h" />
+    <ClInclude Include="Cursor.h" />
     <ClInclude Include="Formation.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
