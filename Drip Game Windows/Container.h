@@ -5,13 +5,14 @@ class Container
 {
 private:
 
-	T* data = nullptr;
+	T* data = nullptr;	// The structure that will hold our data
 
 public:
 
-	int count;
-	int capacity;
+	int count;			// How many items are in our container
+	int capacity;		// How many items our container can hold without resizing
 
+	// Pushes a new object to the top of the container, resizing if necessary
 	void push(T object)
 	{
 		if (count >= capacity)
@@ -22,6 +23,7 @@ public:
 		count++;
 	};
 
+	// Removes the object located at index.
 	void remove(int index)
 	{
 		for (int i = index; i < count - 1; i++)
@@ -31,11 +33,13 @@ public:
 		count--;
 	};
 
+	// Clears the container. WARNING: Doesn't delete contents due to ambiguity over what they are! Do it manually first!
 	void clear()
 	{
 		count = 0;
 	};
 
+	// Doubles the container's capacity.
 	void resize()
 	{
 		T* temp = new T[capacity * 2];
@@ -49,6 +53,7 @@ public:
 		capacity *= 2;
 	};
 
+	// Access the data in the container. Used for writing.
 	T& operator[](int index)
 	{
 		if (index < count && index > -1)
@@ -61,6 +66,7 @@ public:
 		}
 	};
 
+	// Access the data in the container. Used for reading.
 	const T& operator[](int index) const
 	{
 		if (index < count && index > -1)
@@ -73,6 +79,7 @@ public:
 		}
 	};
 
+	// Copy assignment operator
 	Container<T> operator=(const Container<T> &other)
 	{
 		if (data)

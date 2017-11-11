@@ -52,6 +52,7 @@ bool Shader::load(ALLEGRO_DISPLAY* display, std::string vertexPath, std::string 
 void Shader::unload()
 {
 	al_destroy_shader(shader);
+	shader = nullptr;
 }
 
 Shader::Shader()

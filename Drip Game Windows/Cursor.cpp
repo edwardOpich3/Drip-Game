@@ -16,6 +16,7 @@ Cursor::Cursor(ALLEGRO_BITMAP* image, int x, int y, unsigned int distance, bool 
 
 	selection = 0;
 
+	// Make sure the user doesn't accidentially make a choice or move the cursor, should they be holding any keys
 	for (unsigned int i = 0; i < Input::numKeys; i++)
 	{
 		Input::keys[i] = false;

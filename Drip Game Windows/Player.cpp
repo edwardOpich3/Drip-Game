@@ -3,8 +3,7 @@
 #include <math.h>
 
 // Enums
-enum POWERUPS { MULTIPLIER = 3, FAST = 4, SLOW = 8, SIZE = 16, TIME = 32, LIFE = 192 };	// TODO: Is this even used? Get rid of it if not!
-enum ANIMATION_STATE { IDLE, TURNING, HIT };	// Indices of the players animation states. Not yet implemented.
+enum ANIMATION_STATE { IDLE, TURNING, HIT };	// Indices of the players animation states. Currently Unused.
 
 const int Player::trailNum;
 
@@ -12,13 +11,12 @@ void Player::init()
 {
 	x = 1024.0f, y = -1024.0f;
 	width = 32.0f, height = 64.0f;
-	angle = 0.0f;	// Downwards
+	angle = 0.0f;							// Downwards
 	maxAngle = 45.0f, minAngle = -45.0f;	// Max turn is a 45 degree angle in either direction
 	velocity = 7.0f;
 	minVelocity = 6.0f, midVelocity = 9.0f, maxVelocity = 12.0f;
 	acceleration = 0.1f;
 	size = 1.0f;
-	time = 0.0f;
 	score = 0;
 	status = 0;
 	isDead = false;
@@ -26,7 +24,11 @@ void Player::init()
 
 	currentFormation = -1;
 
-	sprite = al_load_bitmap("data/sprites/player.png");
+	// Say no to memory leaks; only load a bitmap if its destination isn't currently occupied
+	if (!sprite)
+	{
+		sprite = al_load_bitmap("data/sprites/player.png");
+	}
 	frame = 0;
 	animationState = IDLE;
 
@@ -46,6 +48,10 @@ void Player::init()
 void Player::unload()
 {
 	al_destroy_bitmap(sprite);
+	sprite = nullptr;
+
+	al_destroy_bitmap(trail);
+	trail = nullptr;
 }
 
 void Player::draw(Camera camera)
@@ -138,15 +144,6 @@ void Player::update()
 	x += sin(angle * (ALLEGRO_PI / 180.0f)) * velocity;
 	y += cos(angle * (ALLEGRO_PI / 180.0f)) * velocity;
 
-	/*if (x < 0)
-	{
-		x = 0;
-	}
-	else if (x > 1024)
-	{
-		x = 1024;
-	}*/
-
 	// Check keys!
 	if (y > 0)
 	{
@@ -171,6 +168,7 @@ void Player::update()
 	// Don't update the score unless the player is on the screen!
 	if (y > 0)
 	{
+		// TODO: Update how score is calculated! Make sure it matches exactly what you want!
 		score += size * velocity * (((status >> 0x3) & 0x7) + 1);
 	}
 }

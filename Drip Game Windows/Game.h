@@ -37,18 +37,15 @@ public:
 	static ALLEGRO_BITMAP* background;	// The background graphic to draw
 	static ALLEGRO_BITMAP* bgBuffer;	// The buffer to draw to the screen in lieu of the background graphic
 
-	static ALLEGRO_BITMAP* uiBitmap;	// The current ui graphic. TODO: Fix this later, it's super hacky!
-
+	static ALLEGRO_BITMAP* uiBitmap;	// The current ui graphic. TODO: Is this a good way to do this? Fix it if not!
 	static ALLEGRO_BITMAP* splashBitmap;	// The bitmap for the splash screen
-
 	static ALLEGRO_BITMAP* titleBitmap;	// The bitmap for the logo.
 
 	static Container<ALLEGRO_BITMAP*> powerups;	// The powerup bitmaps
+	static Container<ALLEGRO_BITMAP*> obstacleSpr;	// Container of obstacle bitmaps
 
 	// Fonts
 	static Container<ALLEGRO_FONT*> hudFont;	// The fonts used for the HUD; size 26, size 34, size 22 bold
-
-	static Container<ALLEGRO_BITMAP*> obstacleSpr;	// Container of obstacle bitmaps
 
 	// Core engine functions
 	static bool initialize();

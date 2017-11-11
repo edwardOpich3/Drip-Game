@@ -1,25 +1,5 @@
 #include "GameObject.h"
 
-// TODO: Fix this! This code is so bad!
-void GameObject::load(int type)
-{
-	this->type = type;
-	x = 512.0f, y = 1024.0f;
-	width = 256.0f, height = 256.0f;
-	angle = 0.0f;
-	size = 1.0f;
-}
-
-void GameObject::unload()
-{
-
-}
-
-void GameObject::update()
-{
-
-}
-
 void GameObject::draw(Camera camera)
 {
 	al_draw_scaled_rotated_bitmap(sprite, (al_get_bitmap_width(sprite) / 2.0f), (al_get_bitmap_height(sprite) / 2.0f), x - camera.x, y - camera.y, width / al_get_bitmap_width(sprite), height / al_get_bitmap_height(sprite), -angle * (ALLEGRO_PI / 180.0f), NULL);

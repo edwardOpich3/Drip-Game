@@ -9,7 +9,6 @@
 #include <random>
 #include <ctime>
 
-// Enums (TODO: Move certain enums to appropriate classes, if possible)
 enum GAME_STATE { SPLASH, TITLE, GAME };	// Current game state
 enum GAME_PHASE { PRE_GAME, MID_GAME, POST_GAME };	// Current phase of gameplay
 
@@ -35,16 +34,13 @@ ALLEGRO_BITMAP* Game::background;
 ALLEGRO_BITMAP* Game::bgBuffer;
 
 ALLEGRO_BITMAP* Game::uiBitmap;
-
 ALLEGRO_BITMAP* Game::splashBitmap;
-
 ALLEGRO_BITMAP* Game::titleBitmap;
 
 Container<ALLEGRO_BITMAP*> Game::powerups;
+Container<ALLEGRO_BITMAP*> Game::obstacleSpr;
 
 Container<ALLEGRO_FONT*> Game::hudFont;
-
-Container<ALLEGRO_BITMAP*> Game::obstacleSpr;
 
 bool Game::initialize()
 {
@@ -181,7 +177,6 @@ void Game::updateFrame()
 	// Vary drawing procedure based on current game state
 	switch (state)
 	{
-		// TODO: Implement splash screen and title screen!
 		case SPLASH:
 		{
 
@@ -620,7 +615,6 @@ void Game::load()
 {
 	switch (state)
 	{
-		// TODO: Implement loading for splash and title screens!
 		case SPLASH:
 		{
 			splashBitmap = al_load_bitmap("data/sprites/ui/splash.png");
@@ -770,11 +764,10 @@ void Game::unload()
 
 			al_destroy_bitmap(titleBitmap);
 
-			for (unsigned int i = 0; i < hudFont.count; i++)
+			for (int i = 0; i < hudFont.count; i++)
 			{
 				al_destroy_font(hudFont[i]);
 			}
-
 			hudFont.clear();
 
 			break;
@@ -786,7 +779,7 @@ void Game::unload()
 			player.unload();
 			bgShader.unload();
 
-			for (unsigned int i = 0; i < hudFont.count; i++)
+			for (int i = 0; i < hudFont.count; i++)
 			{
 				al_destroy_font(hudFont[i]);
 			}

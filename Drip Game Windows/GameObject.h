@@ -19,10 +19,7 @@ public:
 	int frame;				// Current frame, for animated objects
 	int animationState;		// Current animation state, for animated objects
 
-	void load(int type);	// Loads the object based on type
-	void unload();				// Unloads the object
-	void draw(Camera camera);	// Draws the object
-	void update();				// Updates the object
+	void draw(Camera camera);				// Draws the object
 	bool isColliding(float x, float y);		// Does this object intersect with the given position?
 
 	GameObject();
