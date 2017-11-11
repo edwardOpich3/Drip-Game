@@ -251,7 +251,7 @@ void Game::updateFrame()
 			al_draw_text(hudFont[0], al_map_rgb(0, 0, 0), 512, 568, ALLEGRO_ALIGN_CENTER, "Quit");
 
 			al_draw_text(hudFont[1], al_map_rgb(0, 0, 0), 1024, 736, ALLEGRO_ALIGN_RIGHT, "Version 0.1");
-			al_draw_text(hudFont[1], al_map_rgb(0, 0, 0), 0, 704, ALLEGRO_ALIGN_LEFT, "Arrows: Select");
+			al_draw_text(hudFont[1], al_map_rgb(0, 0, 0), 0, 704, ALLEGRO_ALIGN_LEFT, "Arrows: Select, Control Drip");
 			al_draw_text(hudFont[1], al_map_rgb(0, 0, 0), 0, 736, ALLEGRO_ALIGN_LEFT, "Enter: OK");
 
 			cursor.draw();
