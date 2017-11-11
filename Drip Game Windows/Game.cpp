@@ -194,6 +194,7 @@ void Game::updateFrame()
 				unload();
 
 				state = GAME;
+				phase = PRE_GAME;
 
 				load();
 				break;
@@ -522,7 +523,7 @@ void Game::updateFrame()
 					al_draw_textf(hudFont[4], al_map_rgb(255.0f, 255.0f, 255.0f), 512, 416, ALLEGRO_ALIGN_CENTER, "%1.6f", player.size);
 
 					al_draw_text(hudFont[3], al_map_rgb(255.0f, 255.0f, 255.0f), 512, 576, ALLEGRO_ALIGN_CENTER, "Play Again");
-					al_draw_text(hudFont[3], al_map_rgb(255.0f, 255.0f, 255.0f), 512, 640, ALLEGRO_ALIGN_CENTER, "Quit Game");
+					al_draw_text(hudFont[3], al_map_rgb(255.0f, 255.0f, 255.0f), 512, 640, ALLEGRO_ALIGN_CENTER, "Main Menu");
 
 					int temp = cursor.update();
 
@@ -547,10 +548,15 @@ void Game::updateFrame()
 						phase = PRE_GAME;
 					}
 
-					// Quit Game
+					// Main Menu
 					else if (temp == 1)
 					{
-						quit = true;
+						unload();
+
+						state = TITLE;
+
+						load();
+						break;
 					}
 
 					cursor.draw();
@@ -688,6 +694,8 @@ void Game::unloadPowerupData()
 	{
 		al_destroy_bitmap(powerups[i]);
 	}
+
+	powerups.clear();
 }
 
 void Game::unloadObstacleData()
@@ -696,6 +704,8 @@ void Game::unloadObstacleData()
 	{
 		al_destroy_bitmap(obstacleSpr[i]);
 	}
+
+	obstacleSpr.clear();
 }
 
 void Game::unload()
@@ -729,10 +739,14 @@ void Game::unload()
 				al_destroy_font(hudFont[i]);
 			}
 
+			hudFont.clear();
+
 			for (int i = 0; i < formations.count; i++)
 			{
 				formations[i].unload();
 			}
+
+			formations.clear();
 
 			Formation::eraseNumFiles();
 

@@ -26,10 +26,7 @@ void Player::init()
 
 	currentFormation = -1;
 
-	if (!sprite)
-	{
-		sprite = al_load_bitmap("data/sprites/player.png");
-	}
+	sprite = al_load_bitmap("data/sprites/player.png");
 	frame = 0;
 	animationState = IDLE;
 

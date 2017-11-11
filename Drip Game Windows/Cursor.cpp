@@ -15,6 +15,11 @@ Cursor::Cursor(ALLEGRO_BITMAP* image, int x, int y, unsigned int distance, bool 
 	this->maxSelection = maxSelection;
 
 	selection = 0;
+
+	for (unsigned int i = 0; i < Input::numKeys; i++)
+	{
+		Input::keys[i] = false;
+	}
 }
 
 Cursor::~Cursor()
