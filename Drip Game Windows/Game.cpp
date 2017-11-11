@@ -33,7 +33,11 @@ Container<Formation> Game::formations;
 
 ALLEGRO_BITMAP* Game::background;
 ALLEGRO_BITMAP* Game::bgBuffer;
+
 ALLEGRO_BITMAP* Game::uiBitmap;
+
+ALLEGRO_BITMAP* Game::titleBitmap;
+
 Container<ALLEGRO_BITMAP*> Game::powerups;
 
 Container<ALLEGRO_FONT*> Game::hudFont;
@@ -97,7 +101,7 @@ bool Game::initialize()
 	// Initialize various game loop variables
 	quit = false;
 	update = false;
-	state = GAME;
+	state = TITLE;
 	phase = PRE_GAME;
 	level = 1;
 
@@ -183,6 +187,34 @@ void Game::updateFrame()
 
 		case TITLE:
 		{
+			int temp = cursor.update();
+
+			if (temp == 0)
+			{
+				unload();
+
+				state = GAME;
+
+				load();
+				break;
+			}
+
+			// Quit
+			else if (temp == 1)
+			{
+				quit = true;
+			}
+
+			/* DRAW CALLS BEGIN HERE */
+
+			al_clear_to_color(al_map_rgb(255, 255, 255));
+			al_draw_rotated_bitmap(titleBitmap, al_get_bitmap_width(titleBitmap) / 2.0f, al_get_bitmap_height(titleBitmap) / 2.0f, 512, 128, 0.0f, NULL);
+
+			al_draw_text(hudFont[0], al_map_rgb(0, 0, 0), 512, 512, ALLEGRO_ALIGN_CENTER, "Start Game");
+			al_draw_text(hudFont[0], al_map_rgb(0, 0, 0), 512, 568, ALLEGRO_ALIGN_CENTER, "Quit");
+
+			cursor.draw();
+
 			break;
 		}
 
@@ -546,6 +578,10 @@ void Game::load()
 		}
 		case TITLE:
 		{
+			cursor = Cursor(al_load_bitmap("data/sprites/powerups/4.png"), 336, 528, 56, true, 1);
+
+			titleBitmap = al_load_bitmap("data/sprites/ui/title.png");
+			hudFont.push(al_load_ttf_font("data/fonts/hud.ttf", 48, NULL));
 			break;
 		}
 
@@ -672,6 +708,13 @@ void Game::unload()
 		}
 		case TITLE:
 		{
+			al_destroy_bitmap(cursor.image);
+
+			al_destroy_bitmap(titleBitmap);
+
+			al_destroy_font(hudFont[0]);
+			hudFont.clear();
+
 			break;
 		}
 		case GAME:
