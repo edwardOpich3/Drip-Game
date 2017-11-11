@@ -196,8 +196,8 @@ void Game::updateFrame()
 				al_start_timer(splashTimer);
 			}
 
-			// Once the timer reaches 4, it's time for the next state!
-			if (al_get_timer_count(splashTimer) >= 4)
+			// Once the timer reaches 4 or the user hits enter, it's time for the next state!
+			if (al_get_timer_count(splashTimer) >= 4 || Input::keys[Input::ENTER])
 			{
 				al_destroy_timer(splashTimer);
 				splashTimer = nullptr;
@@ -207,6 +207,8 @@ void Game::updateFrame()
 				state = TITLE;
 
 				load();
+
+				Input::keys[Input::ENTER] = false;
 
 				break;
 			}
@@ -247,6 +249,10 @@ void Game::updateFrame()
 
 			al_draw_text(hudFont[0], al_map_rgb(0, 0, 0), 512, 512, ALLEGRO_ALIGN_CENTER, "Start Game");
 			al_draw_text(hudFont[0], al_map_rgb(0, 0, 0), 512, 568, ALLEGRO_ALIGN_CENTER, "Quit");
+
+			al_draw_text(hudFont[1], al_map_rgb(0, 0, 0), 1024, 736, ALLEGRO_ALIGN_RIGHT, "Version 0.1");
+			al_draw_text(hudFont[1], al_map_rgb(0, 0, 0), 0, 704, ALLEGRO_ALIGN_LEFT, "Arrows: Select");
+			al_draw_text(hudFont[1], al_map_rgb(0, 0, 0), 0, 736, ALLEGRO_ALIGN_LEFT, "Enter: OK");
 
 			cursor.draw();
 
@@ -559,6 +565,9 @@ void Game::updateFrame()
 					al_draw_text(hudFont[3], al_map_rgb(255.0f, 255.0f, 255.0f), 512, 576, ALLEGRO_ALIGN_CENTER, "Play Again");
 					al_draw_text(hudFont[3], al_map_rgb(255.0f, 255.0f, 255.0f), 512, 640, ALLEGRO_ALIGN_CENTER, "Main Menu");
 
+					al_draw_text(hudFont[0], al_map_rgb(0, 0, 0), 0, 700, ALLEGRO_ALIGN_LEFT, "Arrows: Select");
+					al_draw_text(hudFont[0], al_map_rgb(0, 0, 0), 0, 734, ALLEGRO_ALIGN_LEFT, "Enter: OK");
+
 					int temp = cursor.update();
 
 					// Play Again
@@ -622,7 +631,10 @@ void Game::load()
 			cursor = Cursor(al_load_bitmap("data/sprites/powerups/4.png"), 336, 528, 56, true, 1);
 
 			titleBitmap = al_load_bitmap("data/sprites/ui/title.png");
+
 			hudFont.push(al_load_ttf_font("data/fonts/hud.ttf", 48, NULL));
+			hudFont.push(al_load_ttf_font("data/fonts/hud.ttf", 24, NULL));
+
 			break;
 		}
 
@@ -758,7 +770,11 @@ void Game::unload()
 
 			al_destroy_bitmap(titleBitmap);
 
-			al_destroy_font(hudFont[0]);
+			for (unsigned int i = 0; i < hudFont.count; i++)
+			{
+				al_destroy_font(hudFont[i]);
+			}
+
 			hudFont.clear();
 
 			break;
