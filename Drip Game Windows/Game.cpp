@@ -36,6 +36,8 @@ ALLEGRO_BITMAP* Game::bgBuffer;
 
 ALLEGRO_BITMAP* Game::uiBitmap;
 
+ALLEGRO_BITMAP* Game::splashBitmap;
+
 ALLEGRO_BITMAP* Game::titleBitmap;
 
 Container<ALLEGRO_BITMAP*> Game::powerups;
@@ -101,7 +103,7 @@ bool Game::initialize()
 	// Initialize various game loop variables
 	quit = false;
 	update = false;
-	state = TITLE;
+	state = SPLASH;
 	phase = PRE_GAME;
 	level = 1;
 
@@ -182,6 +184,38 @@ void Game::updateFrame()
 		// TODO: Implement splash screen and title screen!
 		case SPLASH:
 		{
+
+			static ALLEGRO_TIMER* splashTimer = nullptr;
+			
+			if (!splashTimer)
+			{
+				splashTimer = al_create_timer(1.0);
+			}
+			if (!al_get_timer_started(splashTimer))
+			{
+				al_start_timer(splashTimer);
+			}
+
+			// Once the timer reaches 4, it's time for the next state!
+			if (al_get_timer_count(splashTimer) >= 4)
+			{
+				al_destroy_timer(splashTimer);
+				splashTimer = nullptr;
+
+				unload();
+				
+				state = TITLE;
+
+				load();
+
+				break;
+			}
+
+			/* DRAW CALLS BEGIN HERE */
+
+			al_clear_to_color(al_map_rgb(255, 255, 255));
+			al_draw_rotated_bitmap(splashBitmap, al_get_bitmap_width(splashBitmap) / 2.0f, al_get_bitmap_height(splashBitmap) / 2.0f, 512, 384, 0.0f, NULL);
+
 			break;
 		}
 
@@ -580,6 +614,7 @@ void Game::load()
 		// TODO: Implement loading for splash and title screens!
 		case SPLASH:
 		{
+			splashBitmap = al_load_bitmap("data/sprites/ui/splash.png");
 			break;
 		}
 		case TITLE:
@@ -714,6 +749,7 @@ void Game::unload()
 	{
 		case SPLASH:
 		{
+			al_destroy_bitmap(splashBitmap);
 			break;
 		}
 		case TITLE:

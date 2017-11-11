@@ -39,6 +39,8 @@ public:
 
 	static ALLEGRO_BITMAP* uiBitmap;	// The current ui graphic. TODO: Fix this later, it's super hacky!
 
+	static ALLEGRO_BITMAP* splashBitmap;	// The bitmap for the splash screen
+
 	static ALLEGRO_BITMAP* titleBitmap;	// The bitmap for the logo.
 
 	static Container<ALLEGRO_BITMAP*> powerups;	// The powerup bitmaps
