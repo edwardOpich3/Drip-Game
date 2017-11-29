@@ -4,7 +4,7 @@
 
 int Formation::numFiles = 0;
 
-void Formation::load(int x, int y, Container<ALLEGRO_BITMAP*> obstacleSpr, Container<ALLEGRO_BITMAP*> powerupSpr)
+void Formation::load(Vector2 position, Container<ALLEGRO_BITMAP*> obstacleSpr, Container<ALLEGRO_BITMAP*> powerupSpr)
 {
 	// If we haven't gotten the number of files yet, we need to do that!
 	if (numFiles < 1)
@@ -26,8 +26,7 @@ void Formation::load(int x, int y, Container<ALLEGRO_BITMAP*> obstacleSpr, Conta
 	if (reader.is_open())
 	{
 		// Set formation's position
-		this->x = x;
-		this->y = y;
+		this->position = position;
 
 		unsigned char temp[4];
 
@@ -49,14 +48,14 @@ void Formation::load(int x, int y, Container<ALLEGRO_BITMAP*> obstacleSpr, Conta
 
 			// X and Y Coords (center of the object)
 			reader.read((char*)temp, 4);
-			objects[i].x = *reinterpret_cast<int*>(temp) + x;
+			objects[i].position.x = *reinterpret_cast<int*>(temp) + position.x;
 
 			reader.read((char*)temp, 4);
-			objects[i].y = *reinterpret_cast<int*>(temp) + y;
+			objects[i].position.y = *reinterpret_cast<int*>(temp) + position.y;
 
 			// Scale (1 == 128 width)
 			reader.read((char*)temp, 4);
-			objects[i].size = *reinterpret_cast<float*>(temp);
+			objects[i].scale = *reinterpret_cast<float*>(temp);
 
 			// Angle (0 is pointing down)
 			reader.read((char*)temp, 4);
@@ -73,19 +72,17 @@ void Formation::load(int x, int y, Container<ALLEGRO_BITMAP*> obstacleSpr, Conta
 			}
 
 			// Set the object's width and height based on size
-			objects[i].width = objects[i].size;
-			objects[i].height = objects[i].size * (al_get_bitmap_height(objects[i].sprite) / al_get_bitmap_width(objects[i].sprite));	// Height is always proportional to width
+			objects[i].size.x = objects[i].scale;
+			objects[i].size.y = objects[i].scale * (al_get_bitmap_height(objects[i].sprite) / al_get_bitmap_width(objects[i].sprite));	// Height is always proportional to width
 
 			// If the object is an obstacle, the base width should be 128, otherwise it should be 32.
 			if (!objects[i].powerup)
 			{
-				objects[i].width *= 128.0f;
-				objects[i].height *= 128.0f;
+				objects[i].size *= 128.0f;
 			}
 			else
 			{
-				objects[i].width *= 32.0f;
-				objects[i].height *= 32.0f;
+				objects[i].size *= 32.0f;
 			}
 		}
 		reader.close();
@@ -137,8 +134,7 @@ void Formation::eraseNumFiles()
 
 Formation Formation::operator=(const Formation& other)
 {
-	x = other.x;
-	y = other.y;
+	position = other.position;
 	objects = other.objects;
 	return *this;
 }
@@ -149,8 +145,7 @@ Formation::Formation()
 
 Formation::Formation(const Formation& other)
 {
-	x = other.x;
-	y = other.y;
+	position = other.position;
 	objects = other.objects;
 }
 

@@ -1,10 +1,11 @@
 #pragma once
 #include "allegro5\allegro.h"
+#include "Vector2.h"
 class Cursor
 {
 public:
 
-	int x, y;					// Current position of cursor
+	Vector2 position;			// Current position of cursor
 	int selection;				// Current selection; used for when the user picks something
 	int maxSelection;			// Maximum selection possible
 
@@ -17,7 +18,7 @@ public:
 	void draw();				// Draws the cursor to the correct location on screen.
 
 	Cursor();
-	Cursor(ALLEGRO_BITMAP* image, int x, int y, unsigned int distance, bool isVertical, int maxSelection);
+	Cursor(ALLEGRO_BITMAP* image, Vector2 position, unsigned int distance, bool isVertical, int maxSelection);
 	~Cursor();
 };
 

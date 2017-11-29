@@ -257,7 +257,7 @@ void Game::updateFrame()
 		case GAME:
 		{
 			// Update phase
-			if (player.y > 0)
+			if (player.position.y > 0)
 			{
 				if (!player.isDead)
 				{
@@ -269,7 +269,7 @@ void Game::updateFrame()
 					if (phase != POST_GAME)
 					{
 						phase = POST_GAME;
-						cursor = Cursor(powerups[4], 352, 592, 64, true, 1);
+						cursor = Cursor(powerups[4], Vector2(352, 592), 64, true, 1);
 					}
 				}
 			}
@@ -283,7 +283,7 @@ void Game::updateFrame()
 			for (int i = 0; i < formations.count; i++)
 			{
 				// If formations are 2048px above the top of the camera, get rid of them, since we're probably not going up that high.
-				if (formations[i].y <= camera.y - 2048)
+				if (formations[i].position.y <= camera.position.y - 2048)
 				{
 					formations[i].unload();
 					formations.remove(i);
@@ -292,35 +292,35 @@ void Game::updateFrame()
 				}
 
 				// Are the formations left, right, and center of the player loaded?
-				if ((int)(formations[i].y / 2048.0f) == (int)(player.y / 2048.0f) && player.y >= 2048.0f)
+				if ((int)(formations[i].position.y / 2048.0f) == (int)(player.position.y / 2048.0f) && player.position.y >= 2048.0f)
 				{
-					if ((int)std::floorf(formations[i].x / 2048.0f) == (int)std::floorf(player.x / 2048.0f) - 1)
+					if ((int)std::floorf(formations[i].position.x / 2048.0f) == (int)std::floorf(player.position.x / 2048.0f) - 1)
 					{
 						loadedFormations[0] = true;
 					}
-					else if ((int)std::floorf(formations[i].x / 2048.0f) == (int)std::floorf(player.x / 2048.0f))
+					else if ((int)std::floorf(formations[i].position.x / 2048.0f) == (int)std::floorf(player.position.x / 2048.0f))
 					{
 						loadedFormations[1] = true;
 						player.currentFormation = i;
 					}
-					else if ((int)std::floorf(formations[i].x / 2048.0f) == (int)std::floorf(player.x / 2048.0f) + 1)
+					else if ((int)std::floorf(formations[i].position.x / 2048.0f) == (int)std::floorf(player.position.x / 2048.0f) + 1)
 					{
 						loadedFormations[2] = true;
 					}
 				}
 
 				// Are the formations down-left, down, and down-right of the player loaded?
-				else if ((int)(formations[i].y / 2048.0f) == (int)(player.y / 2048.0f) + 1)
+				else if ((int)(formations[i].position.y / 2048.0f) == (int)(player.position.y / 2048.0f) + 1)
 				{
-					if ((int)std::floorf(formations[i].x / 2048.0f) == (int)std::floorf(player.x / 2048.0f) - 1)
+					if ((int)std::floorf(formations[i].position.x / 2048.0f) == (int)std::floorf(player.position.x / 2048.0f) - 1)
 					{
 						loadedFormations[3] = true;
 					}
-					else if ((int)std::floorf(formations[i].x / 2048.0f) == (int)std::floorf(player.x / 2048.0f))
+					else if ((int)std::floorf(formations[i].position.x / 2048.0f) == (int)std::floorf(player.position.x / 2048.0f))
 					{
 						loadedFormations[4] = true;
 					}
-					else if ((int)std::floorf(formations[i].x / 2048.0f) == (int)std::floorf(player.x / 2048.0f) + 1)
+					else if ((int)std::floorf(formations[i].position.x / 2048.0f) == (int)std::floorf(player.position.x / 2048.0f) + 1)
 					{
 						loadedFormations[5] = true;
 					}
@@ -331,7 +331,7 @@ void Game::updateFrame()
 			for (int i = 0; i < 6; i++)
 			{
 				// Don't bother checking the first row if the player's in the grace-chunk
-				if (player.y < 2048.0f && i < 3)
+				if (player.position.y < 2048.0f && i < 3)
 				{
 					i = 3;
 				}
@@ -339,7 +339,7 @@ void Game::updateFrame()
 				if (!loadedFormations[i])
 				{
 					formations.push(Formation());
-					formations[formations.count - 1].load((((int)std::floorf(player.x / 2048.0f)) + ((i % 3) - 1)) * 2048, (((int)player.y / 2048) + (i / 3)) * 2048, obstacleSpr, powerups);
+					formations[formations.count - 1].load(Vector2((((int)std::floorf(player.position.x / 2048.0f)) + ((i % 3) - 1)) * 2048, (((int)player.position.y / 2048) + (i / 3)) * 2048), obstacleSpr, powerups);
 				}
 			}
 
@@ -351,7 +351,7 @@ void Game::updateFrame()
 				for (int i = 0; i < formations[player.currentFormation].objects.count; i++)
 				{
 					// Are we colliding with the current object?
-					if (formations[player.currentFormation].objects[i].isColliding(player.x, player.y))
+					if (formations[player.currentFormation].objects[i].isColliding(player.position))
 					{
 						// If so, is it an obstacle?
 						if (!formations[player.currentFormation].objects[i].powerup)
@@ -394,7 +394,7 @@ void Game::updateFrame()
 								}
 								else if(formations[player.currentFormation].objects[i].type == 2)
 								{
-									player.size += 0.1f;
+									player.scale += 0.1f;
 								}
 
 								player.status = player.status | (int)std::pow(2, formations[player.currentFormation].objects[i].type);
@@ -454,7 +454,7 @@ void Game::updateFrame()
 
 			// Update the player based on the keyboard state, move the camera to the player's position
 			player.update();
-			camera.update(player.x - 512, player.y - 64);
+			camera.update(player.position - Vector2(512, 64));
 
 			/* DRAW CALLS BEGIN HERE */
 
@@ -469,7 +469,7 @@ void Game::updateFrame()
 			float bufferSize[2] = { 1024, 768 };
 			al_set_shader_float_vector("bufferSize", 2, bufferSize, 1);
 
-			float cameraPos[2] = { (float)camera.x, (float)camera.y };
+			float cameraPos[2] = { (float)camera.position.x, (float)camera.position.y };
 			al_set_shader_float_vector("cameraPos", 2, cameraPos, 1);
 
 			// Draw the infinite BG
@@ -499,7 +499,7 @@ void Game::updateFrame()
 				case MID_GAME:
 				{
 					// TODO: If the timer for it hasn't run out, draw the "SLIDE!" text.
-					if (player.y < 1024)
+					if (player.position.y < 1024)
 					{
 						al_draw_text(hudFont[6], al_map_rgb(255.0f, 255.0f, 255.0f), 512, 288, ALLEGRO_ALIGN_CENTER, "SLIDE!");
 					}
@@ -509,7 +509,7 @@ void Game::updateFrame()
 					al_draw_text(hudFont[0], al_map_rgb(255, 255, 255), 900, 1, ALLEGRO_ALIGN_CENTRE, "SIZE");
 
 					al_draw_textf(hudFont[1], al_map_rgb(255, 255, 255), 128, 32, ALLEGRO_ALIGN_CENTRE, "%08d", player.score);
-					al_draw_textf(hudFont[1], al_map_rgb(255, 255, 255), 900, 32, ALLEGRO_ALIGN_CENTRE, "%1.6f", player.size);
+					al_draw_textf(hudFont[1], al_map_rgb(255, 255, 255), 900, 32, ALLEGRO_ALIGN_CENTRE, "%1.6f", player.scale);
 
 					// Figure out which images to draw to the HUD based on the player's current status
 					for (int i = 0; i < 8; i++)
@@ -555,7 +555,7 @@ void Game::updateFrame()
 					al_draw_textf(hudFont[4], al_map_rgb(255.0f, 255.0f, 255.0f), 512, 256, ALLEGRO_ALIGN_CENTER, "%08d", player.score);
 
 					al_draw_text(hudFont[4], al_map_rgb(255.0f, 255.0f, 255.0f), 512, 352, ALLEGRO_ALIGN_CENTER, "Final Size:");
-					al_draw_textf(hudFont[4], al_map_rgb(255.0f, 255.0f, 255.0f), 512, 416, ALLEGRO_ALIGN_CENTER, "%1.6f", player.size);
+					al_draw_textf(hudFont[4], al_map_rgb(255.0f, 255.0f, 255.0f), 512, 416, ALLEGRO_ALIGN_CENTER, "%1.6f", player.scale);
 
 					al_draw_text(hudFont[3], al_map_rgb(255.0f, 255.0f, 255.0f), 512, 576, ALLEGRO_ALIGN_CENTER, "Play Again");
 					al_draw_text(hudFont[3], al_map_rgb(255.0f, 255.0f, 255.0f), 512, 640, ALLEGRO_ALIGN_CENTER, "Main Menu");
@@ -579,9 +579,9 @@ void Game::updateFrame()
 						{
 							formations.push(Formation());
 						}
-						formations[0].load(-2048, 2048, obstacleSpr, powerups);
-						formations[1].load(0, 2048, obstacleSpr, powerups);
-						formations[2].load(2048, 2048, obstacleSpr, powerups);
+						formations[0].load(Vector2(-2048, 2048), obstacleSpr, powerups);
+						formations[1].load(Vector2(0, 2048), obstacleSpr, powerups);
+						formations[2].load(Vector2(2048, 2048), obstacleSpr, powerups);
 
 						phase = PRE_GAME;
 					}
@@ -622,7 +622,7 @@ void Game::load()
 		}
 		case TITLE:
 		{
-			cursor = Cursor(al_load_bitmap("data/sprites/powerups/4.png"), 336, 528, 56, true, 1);
+			cursor = Cursor(al_load_bitmap("data/sprites/powerups/4.png"), Vector2(336, 528), 56, true, 1);
 
 			titleBitmap = al_load_bitmap("data/sprites/ui/title.png");
 
@@ -652,9 +652,9 @@ void Game::load()
 			{
 				formations.push(Formation());
 			}
-			formations[0].load(-2048, 2048, obstacleSpr, powerups);
-			formations[1].load(0, 2048, obstacleSpr, powerups);
-			formations[2].load(2048, 2048, obstacleSpr, powerups);
+			formations[0].load(Vector2(-2048, 2048), obstacleSpr, powerups);
+			formations[1].load(Vector2(0, 2048), obstacleSpr, powerups);
+			formations[2].load(Vector2(2048, 2048), obstacleSpr, powerups);
 
 			break;
 		}

@@ -2,18 +2,17 @@
 
 void Camera::init()
 {
-	x = 0, y = 0;
-	width = 1024, height = 768;		// Set these to the desired size of the viewport
+	position = Vector2(0.0f, 0.0f);
+	size = Vector2(1024.0f, 768.0f);		// Set these to the desired size of the viewport
 }
 
-void Camera::update(int x, int y)
+void Camera::update(Vector2 position)
 {
-	this->x = x;
-	this->y = y;
+	this->position = position;
 
-	if (this->y < 0)
+	if (this->position.y < 0)
 	{
-		this->y = 0;
+		this->position.y = 0;
 	}
 }
 

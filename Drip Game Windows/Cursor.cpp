@@ -5,11 +5,10 @@ Cursor::Cursor()
 {
 }
 
-Cursor::Cursor(ALLEGRO_BITMAP* image, int x, int y, unsigned int distance, bool isVertical, int maxSelection)
+Cursor::Cursor(ALLEGRO_BITMAP* image, Vector2 position, unsigned int distance, bool isVertical, int maxSelection)
 {
 	this->image = image;
-	this->x = x;
-	this->y = y;
+	this->position = position;
 	this->distance = distance;
 	this->isVertical = isVertical;
 	this->maxSelection = maxSelection;
@@ -69,6 +68,6 @@ void Cursor::draw()
 {
 	if (isVertical)
 	{
-		al_draw_bitmap(image, x, y + (selection * distance), NULL);
+		al_draw_bitmap(image, position.x, position.y + (selection * distance), NULL);
 	}
 }

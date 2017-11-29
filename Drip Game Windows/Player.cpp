@@ -9,14 +9,14 @@ const int Player::trailNum;
 
 void Player::init()
 {
-	x = 1024.0f, y = -1024.0f;
-	width = 32.0f, height = 64.0f;
+	position = Vector2(1024.0f, -1024.0f);
+	size = Vector2(32.0f, 64.0f);
 	angle = 0.0f;							// Downwards
 	maxAngle = 45.0f, minAngle = -45.0f;	// Max turn is a 45 degree angle in either direction
 	velocity = 7.0f;
 	minVelocity = 6.0f, midVelocity = 9.0f, maxVelocity = 12.0f;
 	acceleration = 0.1f;
-	size = 1.0f;
+	scale = 1.0f;
 	score = 0;
 	status = 0;
 	isDead = false;
@@ -38,8 +38,7 @@ void Player::init()
 	}
 	for (int i = 0; i < trailNum; i++)
 	{
-		trailX[i] = 0;
-		trailY[i] = 0;
+		trailPos[i] = Vector2();
 		trailAngle[i] = 0;
 		trailSize[i] = 0;
 	}
@@ -58,9 +57,9 @@ void Player::draw(Camera camera)
 {
 	for (int i = trailNum - 1; i >= 0; i--)
 	{
-		al_draw_scaled_rotated_bitmap(trail, (al_get_bitmap_width(trail) / 2.0f), (al_get_bitmap_height(trail) / 2.0f), trailX[i] - camera.x, trailY[i] - camera.y, (trailSize[i] * width) / al_get_bitmap_width(sprite), (trailSize[i] * height) / al_get_bitmap_height(sprite), -trailAngle[i] * (ALLEGRO_PI / 180.0f), NULL);
+		al_draw_scaled_rotated_bitmap(trail, (al_get_bitmap_width(trail) / 2.0f), (al_get_bitmap_height(trail) / 2.0f), trailPos[i].x - camera.position.x, trailPos[i].y - camera.position.y, (trailSize[i] * size.x) / al_get_bitmap_width(sprite), (trailSize[i] * size.y) / al_get_bitmap_height(sprite), -trailAngle[i] * (ALLEGRO_PI / 180.0f), NULL);
 	}
-	al_draw_scaled_rotated_bitmap(sprite, (al_get_bitmap_width(sprite) / 2.0f), (al_get_bitmap_height(sprite) / 2.0f), x - camera.x, y - camera.y, (size * width) / al_get_bitmap_width(sprite), (size * height) / al_get_bitmap_height(sprite), -angle * (ALLEGRO_PI / 180.0f), NULL);
+	al_draw_scaled_rotated_bitmap(sprite, (al_get_bitmap_width(sprite) / 2.0f), (al_get_bitmap_height(sprite) / 2.0f), position.x - camera.position.x, position.y - camera.position.y, (scale * size.x) / al_get_bitmap_width(sprite), (scale * size.y) / al_get_bitmap_height(sprite), -angle * (ALLEGRO_PI / 180.0f), NULL);
 }
 
 void Player::update()
@@ -75,7 +74,7 @@ void Player::update()
 	// Otherwise, accelerate the drip!
 	else
 	{
-		if (y > 0)
+		if (position.y > 0)
 		{
 			// Try to slow down if we're pressing up!
 			if (Input::keys[Input::UP])
@@ -128,24 +127,22 @@ void Player::update()
 	// Update the paint trail particles
 	for (int i = trailNum - 1; i > 0; i--)
 	{
-		trailX[i] = trailX[i - 1];
-		trailY[i] = trailY[i - 1];
+		trailPos[i] = trailPos[i - 1];
 		trailAngle[i] = trailAngle[i - 1];
 		trailSize[i] = trailSize[i - 1];
 	}
 
 	// The first paint trail particle will be at the player's soon-to-be prior position
-	trailX[0] = x;
-	trailY[0] = y;
+	trailPos[0] = position;
 	trailAngle[0] = angle;
-	trailSize[0] = size;
+	trailSize[0] = scale;
 
-	// Update position
-	x += sin(angle * (ALLEGRO_PI / 180.0f)) * velocity;
-	y += cos(angle * (ALLEGRO_PI / 180.0f)) * velocity;
+	// Update position (TODO: Velocity should be implemented as a vector!)
+	position.x += sin(angle * (ALLEGRO_PI / 180.0f)) * velocity;
+	position.y += cos(angle * (ALLEGRO_PI / 180.0f)) * velocity;
 
 	// Check keys!
-	if (y > 0)
+	if (position.y > 0)
 	{
 		if (Input::keys[Input::LEFT])
 		{
@@ -166,10 +163,10 @@ void Player::update()
 	}
 
 	// Don't update the score unless the player is on the screen!
-	if (y > 0)
+	if (position.y > 0)
 	{
 		// TODO: Update how score is calculated! Make sure it matches exactly what you want!
-		score += size * velocity * (((status >> 0x3) & 0x7) + 1);
+		score += scale * velocity * (((status >> 0x3) & 0x7) + 1);
 	}
 }
 

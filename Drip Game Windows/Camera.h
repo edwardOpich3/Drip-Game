@@ -1,13 +1,15 @@
 #pragma once
+#include "Vector2.h"
+
 class Camera
 {
 public:
 
-	int x, y;				// Top-left corner of the camera's viewport in the world, in pixels
-	int width, height;		// Width and height of the camera, in pixels
+	Vector2 position;		// Top-left corner of the camera's viewport in the world, in pixels
+	Vector2 size;			// Width and height of the camera, in pixels
 
-	void init();				// Sets values to defaults
-	void update(int x, int y);	// Updates x and y according to parameters
+	void init();					// Sets values to defaults
+	void update(Vector2 position);	// Updates x and y according to parameters
 
 	Camera();
 	~Camera();
