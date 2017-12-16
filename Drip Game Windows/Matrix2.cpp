@@ -20,6 +20,21 @@ Matrix2& Matrix2::operator=(const Matrix2& b)
 	return *this;
 }
 
+Vector2& Matrix2::operator*(const Vector2& b)
+{
+	Vector2 myVector;
+
+	for (unsigned int i = 0; i < 2; i++)
+	{
+		for (unsigned int j = 0; j < 2; j++)
+		{
+			myVector[j] += data[i][j] * b[j];
+		}
+	}
+
+	return myVector;
+}
+
 // Identity M2
 Matrix2::Matrix2()
 {
