@@ -1,11 +1,14 @@
 #pragma once
 class Vector2
 {
+private:
+
+	float data[2];					// Stores the floats
 
 public:
 
-	float x;						// x component of our vector
-	float y;						// y component of our vector
+	float &x = data[0];						// x component of our vector
+	float &y = data[1];						// y component of our vector
 
 	float dot(Vector2 other);		// Returns the dot product of this vector with the other
 	float magnitude();				// Returns the magnitude of our vector
@@ -13,6 +16,8 @@ public:
 	void normalize();				// Normalizes the vector; makes its magnitude 1 while preserving direction
 
 
+	float& operator[](int index);					// Edit a float in the vector
+	const float& operator[](int index) const;		// Read a float from the vector
 	Vector2& operator=(const Vector2& other);
 
 	// Arithmetic operators
