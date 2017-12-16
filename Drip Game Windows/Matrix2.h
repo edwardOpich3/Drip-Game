@@ -13,7 +13,10 @@ public:
 	const Vector2& operator[](int index) const;		// Read a vector from the matrix
 	Matrix2& operator=(const Matrix2& b);		// Copy Assignment Operator
 
-	Vector2& operator*(const Vector2& b);		// Multiplication with a vector on the right
+	friend Vector2 operator*(Matrix2 a, const Vector2& b);		// Multiplication with a vector on the right
+
+	friend Matrix2 operator*(Matrix2 a, const Matrix2& b);		// Multiplication with another matrix on the right
+	Matrix2& operator*=(const Matrix2& b);
 
 	Matrix2();
 	Matrix2(const Matrix2& b);	// Copy Constructor

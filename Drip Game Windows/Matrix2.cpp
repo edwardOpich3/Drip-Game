@@ -20,7 +20,7 @@ Matrix2& Matrix2::operator=(const Matrix2& b)
 	return *this;
 }
 
-Vector2& Matrix2::operator*(const Vector2& b)
+Vector2 operator*(Matrix2 a, const Vector2& b)
 {
 	Vector2 myVector;
 
@@ -28,11 +28,38 @@ Vector2& Matrix2::operator*(const Vector2& b)
 	{
 		for (unsigned int j = 0; j < 2; j++)
 		{
-			myVector[j] += data[i][j] * b[j];
+			myVector[j] += a[i][j] * b[j];
 		}
 	}
 
 	return myVector;
+}
+
+Matrix2 operator*(Matrix2 a, const Matrix2& b)
+{
+	a *= b;
+	return a;
+}
+
+Matrix2& Matrix2::operator*=(const Matrix2& b)
+{
+	Matrix2 myMatrix;
+
+	// Pick a row in our matrix
+	for (unsigned int i = 0; i < 2; i++)
+	{
+		// Pick a column in our matrix
+		for (unsigned int j = 0; j < 2; j++)
+		{
+			// Iterates through columns/rows in this/b
+			for (unsigned int k = 0; k < 2; k++)
+			{
+				myMatrix[i][j] += data[i][k] * b[k][j];
+			}
+		}
+	}
+
+	return myMatrix;
 }
 
 // Identity M2
