@@ -55,10 +55,24 @@ void Shader::unload()
 	shader = nullptr;
 }
 
+Shader& Shader::operator=(const Shader& other)
+{
+	if (this != &other)
+	{
+		shader = other.shader;
+	}
+
+	return *this;
+}
+
 Shader::Shader()
 {
 }
 
+Shader::Shader(const Shader& other)
+{
+	*this = other;
+}
 
 Shader::~Shader()
 {

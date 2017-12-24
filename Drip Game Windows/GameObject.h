@@ -22,7 +22,10 @@ public:
 	void draw(Camera camera);				// Draws the object
 	bool isColliding(Vector2 position);		// Does this object intersect with the given position?
 
+	GameObject& operator=(const GameObject& other);
+
 	GameObject();
+	GameObject(const GameObject& other);
 	~GameObject();
 };
 

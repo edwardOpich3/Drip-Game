@@ -40,10 +40,35 @@ bool GameObject::isColliding(Vector2 position)
 	}
 }
 
+GameObject& GameObject::operator=(const GameObject& other)
+{
+	if (this != &other)
+	{
+		position = other.position;
+		size = other.size;
+
+		angle = other.angle;
+		scale = other.scale;
+		type = other.type;
+		powerup = other.powerup;
+
+		sprite = other.sprite;
+
+		frame = other.frame;
+		animationState = other.animationState;
+	}
+
+	return *this;
+}
+
 GameObject::GameObject()
 {
 }
 
+GameObject::GameObject(const GameObject& other)
+{
+	*this = other;
+}
 
 GameObject::~GameObject()
 {

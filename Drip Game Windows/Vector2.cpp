@@ -13,13 +13,22 @@ float Vector2::magnitude()
 
 float Vector2::sqrMagnitude()
 {
-	return powf(data[0], 2) + powf(data[1], 2);
+	float myFloat = 0.0f;
+
+	for (unsigned int i = 0; i < 2; i++)
+	{
+		myFloat += powf(data[i], 2);
+	}
+
+	return myFloat;
 }
 
 void Vector2::normalize()
 {
-	data[0] = data[0] / magnitude();
-	data[1] = data[1] / magnitude();
+	for (unsigned int i = 0; i < 2; i++)
+	{
+		data[i] = data[i] / magnitude();
+	}
 }
 
 
@@ -38,8 +47,10 @@ Vector2& Vector2::operator=(const Vector2& other)
 {
 	if (&other != this)
 	{
-		data[0] = other.data[0];
-		data[1] = other.data[1];
+		for (unsigned int i = 0; i < 2; i++)
+		{
+			data[i] = other.data[i];
+		}
 	}
 
 	return *this;
@@ -53,8 +64,11 @@ Vector2 operator*(Vector2 a, const float& b)
 
 Vector2& Vector2::operator*=(float b)
 {
-	data[0] *= b;
-	data[1] *= b;
+	for (unsigned int i = 0; i < 2; i++)
+	{
+		data[i] *= b;
+	}
+
 	return *this;
 }
 
@@ -66,8 +80,11 @@ Vector2 operator/(Vector2 a, const float& b)
 
 Vector2& Vector2::operator/=(float b)
 {
-	data[0] /= b;
-	data[1] /= b;
+	for (unsigned int i = 0; i < 2; i++)
+	{
+		data[i] /= b;
+	}
+
 	return *this;
 }
 
@@ -79,8 +96,11 @@ Vector2 operator-(Vector2 a, const Vector2& b)
 
 Vector2& Vector2::operator-=(Vector2 b)
 {
-	data[0] -= b.data[0];
-	data[1] -= b.data[1];
+	for (unsigned int i = 0; i < 2; i++)
+	{
+		data[i] -= b.data[i];
+	}
+
 	return *this;
 }
 
@@ -96,6 +116,10 @@ Vector2::Vector2(float x, float y)
 	data[1] = y;
 }
 
+Vector2::Vector2(const Vector2& b)
+{
+	*this = b;
+}
 
 Vector2::~Vector2()
 {

@@ -82,18 +82,21 @@ public:
 	// Copy assignment operator
 	Container<T> operator=(const Container<T> &other)
 	{
-		if (data)
+		if (this != &other)
 		{
-			delete[] data;
-			data = nullptr;
-		}
+			if (data)
+			{
+				delete[] data;
+				data = nullptr;
+			}
 
-		data = new T[other.capacity];
-		count = 0;
-		capacity = 1;
-		for (int i = 0; i < other.count; i++)
-		{
-			push(other[i]);
+			data = new T[other.capacity];
+			count = 0;
+			capacity = 1;
+			for (int i = 0; i < other.count; i++)
+			{
+				push(other[i]);
+			}
 		}
 
 		return *this;
@@ -106,6 +109,7 @@ public:
 		data = new T[capacity];
 	};
 
+	// Copy Constructor
 	Container(const Container<T> &other)
 	{
 		data = new T[other.capacity];

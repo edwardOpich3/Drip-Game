@@ -39,7 +39,10 @@ public:
 	void draw(Camera camera);	// Draws the player to the screen
 	void update();				// Updates the player's position and stuff
 
+	Player& operator=(const Player& other);
+
 	Player();
+	Player(const Player& other);
 	~Player();
 };
 

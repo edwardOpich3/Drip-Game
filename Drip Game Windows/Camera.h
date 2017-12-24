@@ -11,7 +11,10 @@ public:
 	void init();					// Sets values to defaults
 	void update(Vector2 position);	// Updates x and y according to parameters
 
+	Camera& operator=(const Camera& other);
+
 	Camera();
+	Camera(const Camera& other);
 	~Camera();
 };
 

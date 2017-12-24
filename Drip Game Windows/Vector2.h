@@ -3,7 +3,7 @@ class Vector2
 {
 private:
 
-	float data[2];					// Stores the floats
+	float data[2];							// Stores the floats
 
 public:
 
@@ -32,5 +32,6 @@ public:
 
 	Vector2();
 	Vector2(float x, float y);
+	Vector2(const Vector2& b);	// Copy Constructor
 	~Vector2();
 };

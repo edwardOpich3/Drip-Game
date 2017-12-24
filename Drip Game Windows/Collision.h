@@ -6,8 +6,11 @@ class Collision
 	
 
 public:
+	
+	Collision& operator=(const Collision& other);
 
 	Collision();
+	Collision(const Collision& other);
 	~Collision();
 
 };

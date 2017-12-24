@@ -17,7 +17,10 @@ public:
 	int update();				// Updates the cursor based on input; if a selection was made, its value is returned
 	void draw();				// Draws the cursor to the correct location on screen.
 
+	Cursor& operator=(const Cursor& other);
+
 	Cursor();
+	Cursor(const Cursor& b);
 	Cursor(ALLEGRO_BITMAP* image, Vector2 position, unsigned int distance, bool isVertical, int maxSelection);
 	~Cursor();
 };

@@ -170,10 +170,62 @@ void Player::update()
 	}
 }
 
+Player& Player::operator=(const Player& other)
+{
+	if (this != &other)
+	{
+		position = other.position;
+		size = other.size;
+
+		angle = other.angle;
+
+		maxAngle = other.maxAngle;
+		minAngle = other.minAngle;
+
+		velocity = other.velocity;
+
+		minVelocity = other.minVelocity;
+		midVelocity = other.midVelocity;
+		maxVelocity = other.maxVelocity;
+
+		acceleration = other.acceleration;
+
+		scale = other.scale;
+
+		score = other.score;
+		status = other.status;
+
+		isDead = other.isDead;
+		isInvincible = other.isInvincible;
+
+		currentFormation = other.currentFormation;
+
+		sprite = other.sprite;
+
+		frame = other.frame;
+		animationState = other.animationState;
+
+		trail = other.trail;
+
+		for (unsigned int i = 0; i < trailNum; i++)
+		{
+			trailPos[i] = other.trailPos[i];
+			trailAngle[i] = other.trailAngle[i];
+			trailSize[i] = other.trailSize[i];
+		}
+	}
+
+	return *this;
+}
+
 Player::Player()
 {
 }
 
+Player::Player(const Player& other)
+{
+	*this = other;
+}
 
 Player::~Player()
 {

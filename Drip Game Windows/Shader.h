@@ -11,7 +11,10 @@ public:
 	bool load(ALLEGRO_DISPLAY* display, std::string vertexPath, std::string pixelPath);		// Load the shader
 	void unload();																			// Unload the shader
 
+	Shader& operator=(const Shader& other);
+
 	Shader();
+	Shader(const Shader& other);
 	~Shader();
 };
 

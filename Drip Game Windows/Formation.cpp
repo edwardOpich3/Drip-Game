@@ -134,8 +134,12 @@ void Formation::eraseNumFiles()
 
 Formation Formation::operator=(const Formation& other)
 {
-	position = other.position;
-	objects = other.objects;
+	if (this != &other)
+	{
+		position = other.position;
+		objects = other.objects;
+	}
+
 	return *this;
 }
 

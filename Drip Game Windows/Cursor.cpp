@@ -22,6 +22,11 @@ Cursor::Cursor(ALLEGRO_BITMAP* image, Vector2 position, unsigned int distance, b
 	}
 }
 
+Cursor::Cursor(const Cursor& b)
+{
+	*this = b;
+}
+
 Cursor::~Cursor()
 {
 }
@@ -70,4 +75,19 @@ void Cursor::draw()
 	{
 		al_draw_bitmap(image, position.x, position.y + (selection * distance), NULL);
 	}
+}
+
+Cursor& Cursor::operator=(const Cursor& other)
+{
+	if (this != &other)
+	{
+		image = other.image;
+		position = other.position;
+		distance = other.distance;
+		isVertical = other.isVertical;
+		maxSelection = other.maxSelection;
+		selection = other.selection;
+	}
+
+	return *this;
 }

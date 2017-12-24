@@ -16,10 +16,25 @@ void Camera::update(Vector2 position)
 	}
 }
 
+Camera& Camera::operator=(const Camera& other)
+{
+	if (this != &other)
+	{
+		position = other.position;
+		size = other.size;
+	}
+
+	return *this;
+}
+
 Camera::Camera()
 {
 }
 
+Camera::Camera(const Camera& other)
+{
+	*this = other;
+}
 
 Camera::~Camera()
 {
