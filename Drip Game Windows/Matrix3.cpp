@@ -1,11 +1,11 @@
 #include "Matrix3.h"
 
-Vector2& Matrix3::operator[](int index)
+Vector3& Matrix3::operator[](int index)
 {
 	return data[index];
 }
 
-const Vector2& Matrix3::operator[](int index) const
+const Vector3& Matrix3::operator[](int index) const
 {
 	return data[index];
 }
@@ -23,9 +23,9 @@ Matrix3& Matrix3::operator=(const Matrix3& b)
 	return *this;
 }
 
-Vector2 operator*(Matrix3 a, const Vector2& b)
+Vector3 operator*(Matrix3 a, const Vector3& b)
 {
-	Vector2 myVector;
+	Vector3 myVector;
 
 	for (unsigned int i = 0; i < 3; i++)
 	{
@@ -69,8 +69,9 @@ Matrix3& Matrix3::operator*=(const Matrix3& b)
 // Identity M3
 Matrix3::Matrix3()
 {
-	data[0] = Vector2(1.0f, 0.0f);
-	data[1] = Vector2(0.0f, 1.0f);
+	data[0] = Vector3(1.0f, 0.0f, 0.0f);
+	data[1] = Vector3(0.0f, 1.0f, 0.0f);
+	data[2] = Vector3(0.0f, 0.0f, 1.0f);
 }
 
 Matrix3::Matrix3(const Matrix3& b)
