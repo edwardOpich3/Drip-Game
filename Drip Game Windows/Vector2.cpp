@@ -1,4 +1,5 @@
 #include "Vector2.h"
+#include "Vector3.h"
 #include <math.h>
 
 float Vector2::dot(Vector2 other)
@@ -114,6 +115,12 @@ Vector2::Vector2(float x, float y)
 {
 	data[0] = x;
 	data[1] = y;
+}
+
+Vector2::Vector2(Vector3 a)
+{
+	data[0] = a.x;
+	data[1] = a.y;
 }
 
 Vector2::Vector2(const Vector2& b)

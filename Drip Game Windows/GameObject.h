@@ -1,6 +1,7 @@
 #pragma once
 #include "allegro5/allegro.h"
 #include "Camera.h"
+#include "Collision.h"
 #include <string>
 class GameObject
 {
@@ -8,6 +9,9 @@ public:
 
 	Vector2 position;		// Position of the center of the object
 	Vector2 size;			// Width and height of the object, in pixels
+
+	Collision rigidbody;	// The object's collision data
+
 	float angle;			// Angle the object is tilted at (0.0f being its normal angle, increasing counter-clockwise)
 	float scale;			// Size of the object (1 = width of 128 pixels)
 	int type;				// Type index of object

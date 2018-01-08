@@ -118,6 +118,20 @@ Vector3::Vector3(float x, float y, float z)
 	data[2] = z;
 }
 
+Vector3::Vector3(Vector2 xy, float z)
+{
+	x = xy.x;
+	y = xy.y;
+	this->z = z;
+}
+
+Vector3::Vector3(float x, Vector2 yz)
+{
+	this->x = x;
+	y = yz.x;
+	z = yz.y;
+}
+
 Vector3::Vector3(const Vector3& b)
 {
 	*this = b;

@@ -1,4 +1,8 @@
 #pragma once
+
+// TODO: FIX THIS FOR THE LOVE OF GOD! This is SO hacky!!!
+class Vector3;
+
 class Vector2
 {
 private:
@@ -32,6 +36,8 @@ public:
 
 	Vector2();
 	Vector2(float x, float y);
+	Vector2(Vector3 a);
+
 	Vector2(const Vector2& b);	// Copy Constructor
 	~Vector2();
 };
